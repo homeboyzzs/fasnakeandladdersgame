@@ -211,9 +211,269 @@
   @media (max-width:500px){.staff-panel{padding:18px}.staff-kpis{grid-template-columns:1fr 1fr}.staff-head{align-items:flex-start}.staff-title{font-size:22px}}
 
 
+
+  /* ---------------- HALLOWEEN EDITION: PHASE 1 ---------------- */
+  :root{
+    --cyan:#ff8a24;
+    --gold:#ffc15a;
+  }
+  html,body{
+    background:
+      radial-gradient(circle at 12% 2%,rgba(255,111,24,.15),transparent 31%),
+      radial-gradient(circle at 88% 8%,rgba(119,54,168,.18),transparent 34%),
+      linear-gradient(160deg,#100f22,#080d18 62%,#120b18);
+  }
+  .brand-mark{
+    background:linear-gradient(145deg,#542b22,#21172b);
+    border-color:rgba(255,138,36,.42);
+    box-shadow:0 8px 24px rgba(0,0,0,.22),0 0 18px rgba(255,110,25,.08);
+  }
+  .panel{
+    background:linear-gradient(145deg,rgba(31,29,49,.95),rgba(15,18,33,.92));
+    border-color:rgba(255,153,74,.14);
+  }
+  .race-card:before{
+    background-image:
+      linear-gradient(rgba(255,145,62,.045) 1px,transparent 1px),
+      linear-gradient(90deg,rgba(255,145,62,.045) 1px,transparent 1px);
+  }
+  .leader-badge{
+    background:rgba(255,138,36,.09);
+    border-color:rgba(255,138,36,.25);
+    color:#ffd09a;
+  }
+  .leader-dot{background:#ff8a24;box-shadow:0 0 12px #ff8a24}
+  .lane.active{
+    border-color:rgba(255,138,36,.34);
+    background:linear-gradient(180deg,rgba(48,34,43,.94),rgba(14,18,31,.9));
+    box-shadow:inset 0 0 0 1px rgba(255,138,36,.06);
+  }
+  .lane:first-child{
+    border-color:rgba(255,193,90,.22);
+    box-shadow:inset 0 0 0 1px rgba(255,193,90,.05);
+  }
+  .track{
+    background:linear-gradient(180deg,#101323,#0b101b);
+    border-color:rgba(255,166,95,.13);
+  }
+  .checkpoint.c100{background:rgba(255,138,36,.34)}
+  .progress{
+    background:linear-gradient(90deg,rgba(255,255,255,.02),var(--team) 78%,rgba(255,255,255,.24));
+  }
+  .staff-btn{
+    border-color:rgba(255,138,36,.28);
+    background:rgba(255,138,36,.07);
+    color:#ffd1a6;
+  }
+  .staff-btn:hover{background:rgba(255,138,36,.13);border-color:rgba(255,138,36,.4)}
+  .event-card{
+    background:linear-gradient(145deg,rgba(39,27,43,.99),rgba(12,16,29,.99));
+    box-shadow:0 30px 100px rgba(0,0,0,.58),0 0 60px rgba(255,116,34,.10);
+  }
+  .event-card:before{
+    background:radial-gradient(circle at 50% 40%,rgba(255,116,34,.15),transparent 36%);
+  }
+  .event-type{
+    background:rgba(255,138,36,.09);
+    border-color:rgba(255,138,36,.22);
+    color:#ffc28d;
+  }
+  .event-title span{color:#ff9b48}
+  .event-progress i{background:linear-gradient(90deg,#ff7b22,#ffd36b)}
+  .event-toast.overtake .event-card{border-color:rgba(255,138,36,.38)}
+  .event-feed .feed-dot{background:#ff8a24;box-shadow:0 0 10px #ff8a24}
+  .seasonal-tag{
+    display:inline-flex;align-items:center;gap:6px;margin-top:8px;padding:5px 9px;
+    border:1px solid rgba(255,138,36,.25);border-radius:999px;
+    background:linear-gradient(90deg,rgba(255,138,36,.11),rgba(124,70,160,.10));
+    color:#ffc28d;font-size:10px;font-weight:800;letter-spacing:.09em;text-transform:uppercase;
+  }
+  .halloween-sky{
+    position:fixed;inset:0;overflow:hidden;pointer-events:none;z-index:0;
+    opacity:.52;
+  }
+  .halloween-bat{
+    position:absolute;display:block;filter:drop-shadow(0 0 8px rgba(153,118,190,.25));
+    animation:batDrift 12s ease-in-out infinite;
+    font-size:clamp(15px,2vw,25px);
+  }
+  .halloween-bat:nth-child(1){top:12%;left:7%;animation-delay:-2s}
+  .halloween-bat:nth-child(2){top:24%;right:9%;animation-delay:-7s;font-size:18px}
+  .halloween-bat:nth-child(3){top:58%;left:3%;animation-delay:-4s;font-size:16px}
+  .halloween-bat:nth-child(4){top:72%;right:5%;animation-delay:-9s;font-size:22px}
+  @keyframes batDrift{
+    0%,100%{transform:translate(0,0) rotate(-7deg)}
+    50%{transform:translate(18px,-12px) rotate(7deg)}
+  }
+  .app{position:relative;z-index:1}
+  @media (prefers-reduced-motion:reduce){
+    .halloween-bat,.car{animation:none!important}
+  }
+
+
+  /* ---------------- HALLOWEEN EDITION: PHASE 2 ---------------- */
+  .race-card{
+    background:
+      radial-gradient(ellipse at 78% 100%,rgba(117,58,151,.11),transparent 43%),
+      linear-gradient(145deg,rgba(25,28,46,.96),rgba(12,17,31,.94));
+  }
+  .race-card:after{
+    content:"";
+    position:absolute;
+    left:-8%;right:-8%;bottom:42px;height:72px;
+    pointer-events:none;z-index:0;
+    background:
+      radial-gradient(ellipse at 20% 100%,rgba(172,190,210,.09),transparent 62%),
+      radial-gradient(ellipse at 55% 100%,rgba(131,99,165,.10),transparent 64%),
+      radial-gradient(ellipse at 85% 100%,rgba(255,133,45,.07),transparent 60%);
+    filter:blur(12px);
+    animation:hauntedMist 8s ease-in-out infinite alternate;
+  }
+  @keyframes hauntedMist{
+    from{transform:translateX(-1.5%) translateY(2px);opacity:.55}
+    to{transform:translateX(1.5%) translateY(-3px);opacity:1}
+  }
+  .race-header,.track-head,.lanes,.footer,.event-feed{z-index:1}
+  .race-header,.track-head,.footer,.event-feed{position:relative}
+  .track{
+    box-shadow:inset 0 0 22px rgba(0,0,0,.2),0 0 14px rgba(255,117,40,.025);
+  }
+  .track:before{
+    background:repeating-linear-gradient(90deg,rgba(255,177,107,.20) 0 14px,transparent 14px 30px);
+    box-shadow:0 18px 0 rgba(167,134,196,.045),0 -18px 0 rgba(167,134,196,.045);
+  }
+  .checkpoint.c25,.checkpoint.c50,.checkpoint.c75{
+    background:linear-gradient(180deg,rgba(255,156,75,.38),rgba(255,156,75,.08));
+  }
+  .checkpoint.c25 b,.checkpoint.c50 b,.checkpoint.c75 b{
+    color:#ffbd82;
+    text-shadow:0 0 8px rgba(255,126,39,.35);
+  }
+  .checkpoint.c100{
+    width:2px;
+    background:linear-gradient(180deg,#ffc15a,rgba(255,116,35,.25));
+    box-shadow:0 0 10px rgba(255,138,36,.45);
+  }
+  .checkpoint.c100 b{color:#ffd28d;text-shadow:0 0 8px rgba(255,138,36,.55)}
+  .car.at-finish{
+    filter:drop-shadow(0 10px 10px rgba(0,0,0,.55)) drop-shadow(0 0 8px rgba(255,138,36,.38));
+  }
+  .car.at-finish:after{
+    opacity:.55;
+    filter:blur(12px);
+  }
+  .lane.active .car.at-finish{
+    filter:drop-shadow(0 12px 12px rgba(0,0,0,.6)) drop-shadow(0 0 12px rgba(255,138,36,.6));
+  }
+  .event-toast.show .event-card{
+    box-shadow:0 30px 100px rgba(0,0,0,.58),0 0 55px rgba(255,116,34,.13);
+  }
+  .event-burst{
+    background:
+      radial-gradient(circle at 50% 58%,rgba(255,161,74,.16),transparent 16%),
+      radial-gradient(circle at 50% 58%,rgba(141,92,181,.08),transparent 34%);
+  }
+  .seasonal-tag{box-shadow:0 0 18px rgba(255,125,38,.04)}
+  @media (prefers-reduced-motion:reduce){
+    .race-card:after{animation:none}
+  }
+
+
+  /* ---------------- HALLOWEEN GARAGE: DISTINCT TEAM CARS + DETAILS ---------------- */
+  .stand-row{
+    grid-template-columns:30px 72px minmax(0,1fr) auto;
+    gap:9px;
+    background:linear-gradient(90deg,rgba(255,140,55,.018),rgba(130,76,174,.035));
+  }
+  .stand-car{
+    width:72px;height:43px;display:flex;align-items:center;justify-content:center;
+    filter:drop-shadow(0 3px 5px rgba(0,0,0,.42));
+    transition:transform .2s ease,filter .2s ease;
+  }
+  .stand-car svg{display:block;width:100%;height:100%;overflow:visible}
+  .stand-row:hover .stand-car{transform:translateY(-2px) scale(1.04);filter:drop-shadow(0 0 7px color-mix(in srgb,var(--team) 38%,transparent))}
+  .stand-row.active .stand-car{filter:drop-shadow(0 0 8px color-mix(in srgb,var(--team) 48%,transparent))}
+  .stand-row.active{background:linear-gradient(90deg,rgba(255,138,36,.08),rgba(127,73,172,.09));border-color:rgba(255,151,73,.22)}
+  .haunted-village{
+    position:fixed;left:0;bottom:0;width:100%;height:min(34vh,340px);
+    opacity:.22;pointer-events:none;z-index:0;overflow:hidden;
+    mask-image:linear-gradient(to bottom,transparent 0%,#000 26%,#000 100%);
+  }
+  .haunted-village svg{width:100%;height:100%;display:block}
+  .details{
+    background:
+      radial-gradient(ellipse at 10% 100%,rgba(255,125,42,.075),transparent 36%),
+      radial-gradient(ellipse at 92% 0%,rgba(141,77,190,.12),transparent 42%),
+      linear-gradient(145deg,rgba(28,25,43,.97),rgba(11,17,31,.97));
+    border-color:rgba(255,145,66,.18);
+    box-shadow:inset 0 1px 0 rgba(255,196,132,.035),0 12px 32px rgba(0,0,0,.12);
+  }
+  .details:before{
+    content:"";
+    position:absolute;right:-20px;top:-30px;width:180px;height:180px;
+    pointer-events:none;opacity:.15;
+    background:radial-gradient(circle at 50% 50%,rgba(255,136,43,.26) 0 2px,transparent 3px),
+      radial-gradient(circle at 32% 35%,rgba(170,113,218,.24) 0 2px,transparent 3px);
+    background-size:27px 31px,39px 37px;
+    mask-image:radial-gradient(circle,black,transparent 72%);
+  }
+  .details .performance-block,.details .metric-row,.details .average-metric{
+    background:linear-gradient(145deg,rgba(31,29,48,.76),rgba(8,17,31,.74));
+    border-color:rgba(255,150,75,.13);
+  }
+  .details .block-heading strong{color:#ffd0a2}
+  .details .block-heading span{color:#c0a4d4}
+  .details .score-meter,.details .metric-bar{background:#111a2c;border-color:rgba(255,174,110,.12)}
+  .details .score-meter i{background:linear-gradient(90deg,#ff7928,#ffbf62)!important;box-shadow:0 0 12px rgba(255,126,39,.28)}
+  .details .milestone{
+    background:rgba(16,20,37,.8);
+    border-color:rgba(177,122,220,.15);
+  }
+  .details .milestone b{color:#ffbd7d}
+  .details .metric-row{position:relative;overflow:hidden}
+  .details .metric-row:before{
+    content:"";position:absolute;left:0;top:10px;bottom:10px;width:2px;
+    background:linear-gradient(180deg,#ff9a48,#9d65d8);opacity:.65;border-radius:4px;
+  }
+  .details .metric-bar i{box-shadow:0 0 8px rgba(255,140,50,.18)}
+  .details .average-metric-value{ text-shadow:0 0 15px rgba(255,133,45,.08) }
+  .details .config-note{border-color:rgba(255,150,75,.12);background:rgba(12,17,30,.58)}
+  @media (max-width:700px){
+    .stand-row{grid-template-columns:26px 56px minmax(0,1fr) auto;gap:6px;padding:9px 5px}
+    .stand-car{width:56px;height:36px}
+    .stand-team strong{font-size:11px}
+    .stand-sub{font-size:8px}
+    .stand-score{font-size:13px}
+    .haunted-village{height:190px;opacity:.15}
+  }
+
 </style>
 </head>
 <body>
+<div class="halloween-sky" aria-hidden="true">
+  <span class="halloween-bat">🦇</span>
+  <span class="halloween-bat">🦇</span>
+  <span class="halloween-bat">🦇</span>
+  <span class="halloween-bat">🦇</span>
+</div>
+<div class="haunted-village" aria-hidden="true">
+  <svg viewBox="0 0 1600 340" preserveAspectRatio="xMidYMax slice" xmlns="http://www.w3.org/2000/svg">
+    <path fill="#080914" d="M0 300 L0 230 40 230 40 190 65 160 90 190 90 300 120 300 120 220 145 220 145 180 173 143 200 180 200 300 232 300 232 242 260 242 260 202 288 170 316 202 316 300 348 300 348 220 382 220 382 170 414 130 446 170 446 300 475 300 475 240 500 240 500 190 530 154 560 190 560 300 602 300 602 230 632 230 632 190 660 160 688 190 688 300 725 300 725 218 760 218 760 165 794 118 828 165 828 300 865 300 865 238 892 238 892 198 920 165 948 198 948 300 984 300 984 220 1017 220 1017 178 1047 142 1077 178 1077 300 1110 300 1110 235 1140 235 1140 193 1170 157 1200 193 1200 300 1235 300 1235 225 1268 225 1268 175 1300 135 1332 175 1332 300 1370 300 1370 238 1400 238 1400 194 1430 160 1460 194 1460 300 1490 300 1490 230 1525 230 1525 190 1555 155 1585 190 1585 300 1600 300 1600 340 0 340Z"/>
+    <g fill="#080914">
+      <path d="M75 300V105L100 72 125 105V300Z M65 108L100 48 135 108Z"/>
+      <path d="M420 300V90L450 53 480 90V300Z M408 93L450 25 492 93Z"/>
+      <path d="M785 300V80L820 35 855 80V300Z M770 83L820 4 870 83Z"/>
+      <path d="M1285 300V100L1315 60 1345 100V300Z M1273 103L1315 32 1357 103Z"/>
+    </g>
+    <g fill="#ff8b35" opacity=".28">
+      <rect x="91" y="130" width="8" height="13" rx="2"/><rect x="111" y="130" width="8" height="13" rx="2"/>
+      <rect x="435" y="125" width="9" height="14" rx="2"/><rect x="455" y="125" width="9" height="14" rx="2"/>
+      <rect x="804" y="105" width="10" height="16" rx="2"/><rect x="827" y="105" width="10" height="16" rx="2"/>
+      <rect x="1300" y="135" width="9" height="14" rx="2"/><rect x="1320" y="135" width="9" height="14" rx="2"/>
+    </g>
+    <path d="M0 315 Q260 270 460 310 T860 305 T1260 300 T1600 310 L1600 340 L0 340Z" fill="#080914"/>
+  </svg>
+</div>
 <div class="app">
   <header class="topbar">
     <div class="brand">
@@ -221,6 +481,7 @@
       <div>
         <h1>First American Performance League</h1>
         <div class="subtitle">CSAT leads the scoring. QA and AHT help each team reach the account targets.</div>
+        <div class="seasonal-tag">🎃 Halloween Edition <span aria-hidden="true">✦</span> Spooky Race Week</div>
       </div>
     </div>
     <div class="top-stats">
@@ -236,8 +497,8 @@
     <section class="panel race-card">
       <div class="race-header">
         <div>
-          <h2>Championship Circuit</h2>
-          <p>Every team races on the same circuit. The car position is driven by the weighted performance score.</p>
+          <h2>🎃 Haunted Championship Circuit</h2>
+          <p>Race through the haunted circuit. Every car position is still driven by the weighted performance score.</p>
         </div>
         <div class="leader-badge"><span class="leader-dot"></span><span id="leaderBadge">Loading standings…</span></div>
       </div>
@@ -260,7 +521,7 @@
     </section>
 
     <aside class="panel standings">
-      <h2>Standings</h2>
+      <h2>🏆 Spooky Standings</h2>
       <div class="section-note">Ranking is based on CSAT 40% + QA 30% + AHT 30%.</div>
       <div id="standingList"></div>
     </aside>
@@ -282,7 +543,7 @@
       <div>
         <div class="performance-block">
           <div class="block-heading">
-            <strong>Overall performance</strong>
+            <strong>🎃 Overall performance</strong>
             <span id="detailStatus">—</span>
           </div>
           <div class="score-meter"><i id="detailMeter"></i></div>
@@ -300,7 +561,7 @@
       </div>
 
       <div>
-        <div class="block-heading"><strong>Metric breakdown</strong><span id="selectedRank">—</span></div>
+        <div class="block-heading"><strong>🕯️ Metric breakdown</strong><span id="selectedRank">—</span></div>
         <div id="metricList" class="metric-list"></div>
       </div>
     </div>
@@ -598,66 +859,99 @@
     return 'th';
   }
 
-  function carSVG(color){
+  function carSVG(color, teamName=''){
     const safe = color.replace('#','');
+    const teamKey = String(teamName).toLowerCase();
+    const models = {
+      pumpkin: {
+        key:'pumpkin', body:'M28 44 Q35 31 59 29 L103 29 Q118 30 130 39 L153 44 Q162 47 166 54 L162 60 L26 60 L20 53 Z',
+        glass:'M57 31 Q68 17 85 17 L105 19 Q116 22 122 32 L108 35 L61 35 Z',
+        topper:`<g transform="translate(91 14)">
+          <path d="M-2 -8 Q-4 -13 1 -15 Q4 -11 2 -8" fill="#6b8d42" stroke="#b7dc76" stroke-width="1"/>
+          <path d="M-11 -2 Q-10 -11 0 -11 Q10 -11 11 -2 Q12 7 0 8 Q-12 7 -11 -2Z" fill="#ff8a24" stroke="#ffd08b" stroke-width="1.2"/>
+          <path d="M-5 -8 Q-2 -2 -5 4 M1 -9 Q4 -2 1 5 M6 -7 Q8 -1 6 3" fill="none" stroke="#d65b16" stroke-width="1.1"/>
+          <path d="M-6 -1 L-2 -4 L-1 0Z M2 0 L5 -4 L6 0Z M-5 3 Q0 7 5 3Z" fill="#3a1820"/>
+        </g><path d="M42 25 L35 18 L48 21 L55 15 L57 27Z" fill="#ff8a24" opacity=".7"/>`
+      },
+      glitch: {
+        key:'glitch', body:'M23 45 L43 35 L66 29 L111 29 L128 36 L150 39 L168 49 L166 58 L20 58 L17 51 Z',
+        glass:'M61 31 L77 19 L105 19 L118 31 L105 34 L59 34 Z',
+        topper:`<g transform="translate(92 15)">
+          <path d="M-12 -1 Q-10 -10 0 -10 Q10 -10 12 -1 L10 7 L-10 7Z" fill="#e9fbff" stroke="#7be9ff" stroke-width="1.3"/>
+          <path d="M-7 -2 L-3 -4 L-2 0Z M3 0 L7 -4 L8 -1Z" fill="#18304a"/>
+          <path d="M-7 3 Q0 7 7 3 L5 8 L-5 8Z" fill="#18304a"/>
+          <path d="M-4 8 L-4 11 M0 8 L0 12 M4 8 L4 11" stroke="#7be9ff" stroke-width="1.5"/>
+        </g><rect x="43" y="21" width="12" height="3" fill="#3ff2ff"/><rect x="48" y="25" width="7" height="2" fill="#ff55d9"/><rect x="126" y="32" width="11" height="3" fill="#3ff2ff"/>`
+      },
+      vampire: {
+        key:'vampire', body:'M20 48 Q31 43 49 40 L71 31 Q88 26 111 31 L135 40 L160 45 Q168 48 170 54 L166 59 L18 59 L15 54Z',
+        glass:'M69 32 Q83 20 103 21 Q116 23 126 37 L108 36 L62 37Z',
+        topper:`<path d="M72 28 Q54 7 36 12 Q46 25 57 34 L42 31 L58 40 L75 35Z" fill="#1a1029" stroke="#b17aff" stroke-width="1.4"/><path d="M102 28 Q121 7 140 12 Q130 25 119 34 L134 31 L118 40 L100 35Z" fill="#1a1029" stroke="#b17aff" stroke-width="1.4"/><path d="M81 33 L86 39 L91 33 L96 39 L101 33" fill="none" stroke="#ff4b66" stroke-width="2"/>`
+      },
+      zombie: {
+        key:'zombie', body:'M24 39 L48 35 L55 27 L112 27 L124 35 L149 39 L162 47 L164 58 L20 58 L18 48Z',
+        glass:'M57 29 L64 19 L103 19 L115 29 L111 34 L56 34Z',
+        topper:`<path d="M51 27 L48 17 L56 23 L62 13 L68 25 L76 14 L81 26 L90 17 L96 26 L105 16 L110 27Z" fill="#6f8f36" stroke="#c2df6b" stroke-width="1.2"/><path d="M37 43 l5 -3 l3 5 l-6 2Z M126 43 l6 -4 l3 5 l-7 3Z" fill="#3d2c22" stroke="#b8a17a" stroke-width=".8"/><circle cx="71" cy="42" r="2" fill="#ff6a43"/><circle cx="78" cy="42" r="2" fill="#ff6a43"/>`
+      },
+      witch: {
+        key:'witch', body:'M27 44 Q37 33 57 31 L105 29 Q119 30 132 39 L155 44 Q164 47 166 54 L161 59 L25 59 L20 52Z',
+        glass:'M60 32 Q72 19 88 18 L106 20 Q117 23 122 33 L108 35 L60 35Z',
+        topper:`<g transform="translate(91 14)"><path d="M-13 1 L13 1 L9 5 L-10 5Z" fill="#ffb83f" stroke="#ffe5a1" stroke-width=".8"/><path d="M-7 1 L0 -16 L6 1Z" fill="#392052" stroke="#b978ff" stroke-width="1.2"/><path d="M-4 -7 L4 -7" stroke="#ffcf5d" stroke-width="2"/><path d="M-7 -16 L0 -19 L5 -15Z" fill="#b978ff"/></g><path d="M43 39 L52 36 L60 39 L52 42Z" fill="#ffcf5d" opacity=".9"/>`
+      },
+      skeleton: {
+        key:'skeleton', body:'M22 46 L42 39 L60 31 L111 31 L127 38 L151 43 Q163 47 166 53 L163 59 L20 59 L17 52Z',
+        glass:'M62 33 L76 22 L103 22 L119 34 L108 36 L59 36Z',
+        topper:`<g transform="translate(91 14)"><path d="M-10 -4 Q-10 -13 0 -13 Q10 -13 10 -4 L8 5 L-8 5Z" fill="#eaf0f5" stroke="#ffffff" stroke-width="1"/><circle cx="-4" cy="-4" r="2.3" fill="#263044"/><circle cx="4" cy="-4" r="2.3" fill="#263044"/><path d="M-5 1 L5 1 L4 5 L-4 5Z" fill="#263044"/><path d="M-6 7 L-6 10 M0 7 L0 10 M6 7 L6 10" stroke="#dce8f2" stroke-width="1.5"/></g><path d="M40 29 L46 24 L52 29 L46 34Z M129 37 L135 32 L141 37 L135 42Z" fill="#eaf0f5" opacity=".75"/>`
+      },
+      cat: {
+        key:'cat', body:'M25 44 Q36 33 58 30 L105 30 Q121 31 132 39 L155 44 Q165 48 166 54 L162 59 L24 59 L19 52Z',
+        glass:'M60 32 Q72 20 88 19 L106 21 Q117 23 123 33 L109 35 L60 35Z',
+        topper:`<path d="M70 27 L73 10 L86 22 L98 22 L111 10 L114 28 L104 33 L80 33Z" fill="#10111d" stroke="#b9a7ff" stroke-width="1.3"/><path d="M75 17 L79 23 L84 22Z M104 22 L109 17 L109 24Z" fill="#ff5ca8"/><path d="M23 49 Q9 40 13 30 Q17 24 24 29" fill="none" stroke="#171323" stroke-width="4" stroke-linecap="round"/><path d="M23 49 Q9 40 13 30 Q17 24 24 29" fill="none" stroke="#b9a7ff" stroke-width="1.2" stroke-linecap="round"/>`
+      }
+    };
+    let model = models.pumpkin;
+    if(teamKey.includes('404') || teamKey.includes('not found')) model=models.glitch;
+    else if(teamKey.includes('olimpia')) model=models.vampire;
+    else if(teamKey.includes('amargos')) model=models.zombie;
+    else if(teamKey.includes('alpha')) model=models.witch;
+    else if(teamKey.includes('yovis')) model=models.skeleton;
+    else if(teamKey.includes('intuicion') || teamKey.includes('intuición')) model=models.cat;
     return `
-      <svg viewBox="0 0 180 82" aria-hidden="true">
+      <svg data-car-model="${model.key}" viewBox="0 0 180 82" aria-hidden="true">
         <defs>
-          <linearGradient id="body-${safe}" x1="0" x2="1" y1="0" y2="1">
+          <linearGradient id="body-${safe}-${model.key}" x1="0" x2="1" y1="0" y2="1">
             <stop offset="0" stop-color="#ffffff" stop-opacity=".34"/>
             <stop offset=".22" stop-color="${color}" stop-opacity=".95"/>
             <stop offset="1" stop-color="${color}"/>
           </linearGradient>
-          <linearGradient id="glass-${safe}" x1="0" x2="1">
+          <linearGradient id="glass-${safe}-${model.key}" x1="0" x2="1">
             <stop offset="0" stop-color="#eef8ff" stop-opacity=".55"/>
             <stop offset=".5" stop-color="#1b2f45"/>
             <stop offset="1" stop-color="#07131f"/>
           </linearGradient>
-          <filter id="glow-${safe}" x="-40%" y="-40%" width="180%" height="180%">
+          <filter id="glow-${safe}-${model.key}" x="-40%" y="-40%" width="180%" height="180%">
             <feGaussianBlur stdDeviation="2.4" result="blur"/>
             <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
           </filter>
         </defs>
-
-        <!-- rear light / speed accent -->
-        <rect x="8" y="34" width="14" height="5" rx="2.5" fill="#ff6b78" opacity=".95" filter="url(#glow-${safe})"/>
+        <rect x="8" y="34" width="14" height="5" rx="2.5" fill="#ff6b78" opacity=".95" filter="url(#glow-${safe}-${model.key})"/>
         <rect x="10" y="43" width="10" height="3" rx="1.5" fill="#ffb1ba" opacity=".65"/>
-
-        <!-- rear wing -->
         <path d="M20 25 L51 21 L58 26 L18 30 Z" fill="#121d2a" stroke="#bfd0df" stroke-opacity=".35" stroke-width="1.4"/>
         <path d="M21 22 L54 19 L58 22 L20 26 Z" fill="${color}" opacity=".9"/>
         <rect x="28" y="22" width="4" height="11" rx="1.5" fill="#1a2735"/>
         <rect x="49" y="20" width="4" height="11" rx="1.5" fill="#1a2735"/>
-
-        <!-- body -->
-        <path d="M30 43 Q38 30 61 28 L104 28 Q116 28 128 37 L146 43 Q151 45 155 51 L151 59 L28 59 L22 52 Z" fill="url(#body-${safe})" stroke="#f5fbff" stroke-opacity=".18" stroke-width="1.2"/>
-        <path d="M58 29 Q67 16 83 15 L105 18 Q115 21 121 31 L107 34 L63 34 Z" fill="url(#glass-${safe})" stroke="#e7f6ff" stroke-opacity=".22" stroke-width="1.2"/>
-        <path d="M71 19 L91 18 L99 31 L63 31 Z" fill="#b9efff" opacity=".18"/>
-
-        <!-- nose + front wing -->
-        <path d="M128 37 L155 43 L169 51 L166 55 L139 53 Z" fill="${color}" opacity=".92"/>
-        <path d="M155 48 L174 51 L177 55 L151 55 Z" fill="#dbe9f4" opacity=".6"/>
+        ${model.topper}
+        <path d="${model.body}" fill="url(#body-${safe}-${model.key})" stroke="#f5fbff" stroke-opacity=".2" stroke-width="1.2"/>
+        <path d="${model.glass}" fill="url(#glass-${safe}-${model.key})" stroke="#e7f6ff" stroke-opacity=".26" stroke-width="1.2"/>
+        <path d="M71 23 L91 21 L101 32 L63 33Z" fill="#b9efff" opacity=".14"/>
+        <path d="M128 37 L155 43 L169 51 L166 55 L139 53Z" fill="${color}" opacity=".92"/>
+        <path d="M155 48 L174 51 L177 55 L151 55Z" fill="#dbe9f4" opacity=".6"/>
         <rect x="158" y="42" width="9" height="3" rx="1.5" fill="#fff" opacity=".55"/>
-
-        <!-- sidepod highlight -->
+        <path d="M78 41 L73 37 L74 43 L69 41 L73 47 L78 45 L83 47 L87 41 L82 43 L83 37 Z" fill="#24152f" stroke="#ffcf93" stroke-opacity=".72" stroke-width=".7"/>
         <path d="M45 39 L87 37 L126 40 L117 49 L53 49 Z" fill="#ffffff" opacity=".08"/>
         <path d="M43 46 L98 46" stroke="#ffffff" stroke-opacity=".17" stroke-width="1.5"/>
-
-        <!-- wheels -->
-        <g>
-          <circle cx="52" cy="57" r="14" fill="#050b11" stroke="#24384b" stroke-width="3"/>
-          <circle cx="52" cy="57" r="6" fill="#7d93a7"/>
-          <circle cx="52" cy="57" r="2.5" fill="#d9e6f2"/>
-          <path d="M52 44 L52 50 M52 64 L52 70 M39 57 L45 57 M59 57 L65 57" stroke="#2f465b" stroke-width="1.4"/>
-        </g>
-        <g>
-          <circle cx="132" cy="57" r="14" fill="#050b11" stroke="#24384b" stroke-width="3"/>
-          <circle cx="132" cy="57" r="6" fill="#7d93a7"/>
-          <circle cx="132" cy="57" r="2.5" fill="#d9e6f2"/>
-          <path d="M132 44 L132 50 M132 64 L132 70 M119 57 L125 57 M139 57 L145 57" stroke="#2f465b" stroke-width="1.4"/>
-        </g>
-
-        <!-- team accent + exhaust -->
+        <g><circle cx="52" cy="57" r="14" fill="#050b11" stroke="#24384b" stroke-width="3"/><circle cx="52" cy="57" r="6" fill="#7d93a7"/><circle cx="52" cy="57" r="2.5" fill="#d9e6f2"/><path d="M52 44 L52 50 M52 64 L52 70 M39 57 L45 57 M59 57 L65 57" stroke="#2f465b" stroke-width="1.4"/></g>
+        <g><circle cx="132" cy="57" r="14" fill="#050b11" stroke="#24384b" stroke-width="3"/><circle cx="132" cy="57" r="6" fill="#7d93a7"/><circle cx="132" cy="57" r="2.5" fill="#d9e6f2"/><path d="M132 44 L132 50 M132 64 L132 70 M119 57 L125 57 M139 57 L145 57" stroke="#2f465b" stroke-width="1.4"/></g>
         <rect x="72" y="49" width="35" height="4" rx="2" fill="${color}" opacity=".9"/>
         <circle cx="22" cy="47" r="3" fill="#ffdc7a" opacity=".9"/>
         <path d="M14 60 Q21 62 28 60" stroke="${color}" stroke-width="2" stroke-linecap="round" opacity=".9"/>
@@ -808,7 +1102,7 @@
         if(!overtaker || !passedTeam) return;
         events.push({
           id:eventId('overtake',[id,passedId,current.teams[id]?.score,current.teams[passedId]?.score],stamp),
-          type:'overtake',icon:'🚨',label:'OVERTAKE!',
+          type:'overtake',icon:'🦇',label:'OVERTAKE!',
           title:`${overtaker.name} <span>passed</span> ${passedTeam.name}`,
           message:`The new standings put ${overtaker.name} ahead of ${passedTeam.name}.`,
           teamId:id
@@ -823,7 +1117,7 @@
       if(leader){
         events.push({
           id:eventId('new_leader',[currLeader],stamp),
-          type:'overtake',icon:'🏆',label:'NEW LEADER',
+          type:'overtake',icon:'🎃',label:'NEW LEADER',
           title:`${leader.name} <span>takes P1</span>`,
           message:`${leader.name} is now leading the championship at ${oneDecimal(currMap[currLeader].score)}%.`,
           teamId:currLeader
@@ -837,13 +1131,13 @@
       if(!prev || !now || !team) return;
       if(!prev.allTargetsMet && now.allTargetsMet){
         events.push({
-          id:eventId('target_master',[id],stamp),type:'target',icon:'🏆',label:'TARGET MASTER',
+          id:eventId('target_master',[id],stamp),type:'target',icon:'🏆🎃',label:'TARGET MASTER',
           title:`${team.name} <span>hit all 3 targets</span>`,
           message:`CSAT, QA and AHT are all on target. The team has reached Target Mastery.`,teamId:id
         });
       }else if(prev.allTargetsMet && !now.allTargetsMet){
         events.push({
-          id:eventId('target_lost',[id],stamp),type:'warning',icon:'⚠️',label:'TARGET LOST',
+          id:eventId('target_lost',[id],stamp),type:'warning',icon:'👻',label:'TARGET UPDATE',
           title:`${team.name} <span>left Target Mastery</span>`,
           message:`One or more account targets are no longer being met.`,teamId:id
         });
@@ -860,7 +1154,7 @@
     });
     if(best && best.delta >= 3){
       events.push({
-        id:eventId('hot_lap',[best.id,best.prev.score,best.now.score],stamp),type:'overtake',icon:'🔥',label:'HOT LAP',
+        id:eventId('hot_lap',[best.id,best.prev.score,best.now.score],stamp),type:'overtake',icon:'🔥🎃',label:'HOT LAP',
         title:`${best.team.name} <span>+${oneDecimal(best.delta)} points</span>`,
         message:`Biggest performance gain since the last update.`,teamId:best.id
       });
@@ -895,7 +1189,7 @@
     const card=document.getElementById('eventCard');
     toast.className='event-toast show ' + (event.type||'overtake');
     document.getElementById('eventType').textContent=event.label||'LIVE RACE EVENT';
-    document.getElementById('eventIcon').textContent=event.icon||'🏎️';
+    document.getElementById('eventIcon').textContent=event.icon||'🎃';
     document.getElementById('eventTitle').innerHTML=event.title||'';
     document.getElementById('eventMessage').textContent=event.message||'';
     const duration=Math.max(2800,Number(config.events?.toastDurationMs)||6200);
@@ -1268,7 +1562,7 @@
         </div>
         <div class="track">
           <div class="checkpoint c25"><b>25</b></div><div class="checkpoint c50"><b>50</b></div><div class="checkpoint c75"><b>75</b></div><div class="checkpoint c100"><b>100</b></div>
-          <div class="progress" id="p-${team.id}"></div><div class="trail" id="t-${team.id}"></div><div class="car" id="c-${team.id}">${carSVG(team.color)}</div>
+          <div class="progress" id="p-${team.id}"></div><div class="trail" id="t-${team.id}"></div><div class="car" id="c-${team.id}">${carSVG(team.color,team.name)}</div>
         </div>
         <div class="score">${oneDecimal(team.score)}<small>%</small>${team.score>=100?'<span class="finish-flag">🏁</span>':''}</div>
       `;
@@ -1280,6 +1574,7 @@
       srow.dataset.id=team.id;
       srow.innerHTML=`
         <div class="rank ${rank===1?'r1':rank===2?'r2':rank===3?'r3':''}">${rank}</div>
+        <div class="stand-car" style="--team:${team.color}" aria-hidden="true">${carSVG(team.color,team.name)}</div>
         <div class="stand-team">
           <strong>${team.name}</strong>
           <div class="stand-sub">${statusFor(team)} · ${team.targetsHit}/3 targets${team.targetMargin>0?` · +${oneDecimal(team.targetMargin)} margin`:''}</div>
@@ -1294,7 +1589,15 @@
         const p=document.getElementById(`p-${team.id}`), t=document.getElementById(`t-${team.id}`), c=document.getElementById(`c-${team.id}`);
         if(p) p.style.width=team.score+'%';
         if(t) t.style.width=Math.max(team.score-3,0)+'%';
-        if(c) c.style.left=`${team.score}%`;
+        if(c){
+          const trackWidth=c.parentElement?.clientWidth || 0;
+          // Keep the complete car (including its slight visual scale) inside the track.
+          const halfCarPct=trackWidth ? ((c.offsetWidth * 1.16 / 2) / trackWidth) * 100 : 4;
+          const visiblePosition=Math.min(100-halfCarPct,Math.max(halfCarPct,team.score));
+          c.style.left=`${visiblePosition}%`;
+          c.classList.toggle('at-finish',team.score>=100);
+          c.classList.toggle('at-start',team.score<=0);
+        }
       });
     });
 
