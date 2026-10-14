@@ -155,6 +155,27 @@
   @media (max-width:700px){.event-card{padding:24px}.event-title{font-size:32px}.event-message{font-size:13px}}
 
 
+
+  /* ---------------- WEEKLY RACE RECAP ---------------- */
+  .recap-panel{margin-top:18px;padding:18px;border:1px solid rgba(255,212,90,.22);border-radius:18px;background:linear-gradient(145deg,rgba(30,30,43,.96),rgba(10,18,31,.96))}
+  .recap-head{display:flex;align-items:flex-start;justify-content:space-between;gap:14px;flex-wrap:wrap}
+  .recap-head h3{margin:0;color:#ffd45a;font:700 20px "Space Grotesk",sans-serif}
+  .recap-head p{margin:6px 0 0;color:#9fb1c6;font-size:12px;line-height:1.5;max-width:720px}
+  .recap-controls{display:flex;gap:9px;align-items:end;flex-wrap:wrap;margin-top:16px}
+  .recap-field{display:flex;flex-direction:column;gap:6px;color:#9fb1c6;font-size:11px}
+  .recap-field input{background:#091321;border:1px solid rgba(164,187,214,.2);color:#f4f8ff;border-radius:9px;padding:10px 11px;min-height:38px}
+  .recap-status{font-size:12px;line-height:1.5;margin-top:12px;color:#a9bfd4}
+  .recap-status.error{color:#ff9aa7}.recap-status.success{color:#78e8a5}
+  .recap-preview{margin-top:16px;border:1px solid rgba(164,187,214,.13);border-radius:14px;overflow:hidden;background:#080f1b}
+  .recap-preview-head{padding:12px 14px;border-bottom:1px solid rgba(164,187,214,.12);font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:#ffd45a;font-weight:800}
+  .recap-preview-body{padding:16px;color:#dbe7f5;font-size:12px;line-height:1.6;overflow-x:auto}
+  .recap-preview-body table{width:100%;border-collapse:collapse;margin-top:10px}
+  .recap-preview-body th,.recap-preview-body td{padding:8px;text-align:left;border-bottom:1px solid rgba(164,187,214,.12);white-space:nowrap}
+  .recap-preview-body th{color:#ffd45a;font-size:10px;text-transform:uppercase}
+  .recap-preview-body .recap-hero{font-size:22px;font-weight:800;color:#fff;margin:4px 0}
+  .recap-actions{display:flex;gap:9px;flex-wrap:wrap;margin-top:12px}
+  @media(max-width:700px){.recap-panel{padding:13px}.recap-head h3{font-size:18px}.recap-controls>*{flex:1 1 100%}}
+
   /* ---------------- SUPABASE / STAFF AREA ---------------- */
   .supabase-status{display:inline-flex;align-items:center;gap:7px}
   .status-dot{width:7px;height:7px;border-radius:50%;background:#59d88c;box-shadow:0 0 10px rgba(89,216,140,.75)}
@@ -622,6 +643,28 @@
     <div class="staff-view-note">
       <strong>How it works:</strong> CSAT is weighted at 40%, QA at 30%, and AHT at 30%. A metric reaches 100 points when its account target is met; overall performance stays capped at 100%. Saving a metric update also creates the next history snapshot automatically.
     </div>
+
+    <section class="recap-panel" aria-labelledby="weeklyRecapTitle">
+      <div class="recap-head">
+        <div>
+          <h3 id="weeklyRecapTitle">🏁 Friday Race Recap</h3>
+          <p>Build a weekly, email-ready race recap using the league’s saved weekly snapshots. Generate a preview first; nothing is emailed automatically and the public race is not changed.</p>
+        </div>
+        <span class="target-chip good">STAFF ONLY</span>
+      </div>
+      <div class="recap-controls">
+        <label class="recap-field" for="recapDate">Report week ending
+          <input id="recapDate" type="date">
+        </label>
+        <button class="primary-btn" id="generateRecapBtn" type="button">GENERATE PREVIEW</button>
+        <button class="secondary-btn" id="downloadRecapBtn" type="button" disabled>DOWNLOAD EMAIL HTML</button>
+      </div>
+      <div class="recap-status" id="recapStatus" role="status" aria-live="polite">Choose the snapshot date and generate a preview. A complete snapshot for that date must exist in Supabase.</div>
+      <div class="recap-preview" id="recapPreview" hidden>
+        <div class="recap-preview-head">Email preview · First American Performance League</div>
+        <div class="recap-preview-body" id="recapPreviewBody"></div>
+      </div>
+    </section>
 
     <div class="staff-table-wrap">
       <table class="staff-table">
@@ -1484,6 +1527,118 @@
     }
   }
 
+
+  let latestRecapHtml = '';
+
+  function escapeRecapHtml(value){
+    return String(value ?? '').replace(/[&<>"']/g, ch => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]));
+  }
+  function recapDateLabel(value){
+    if(!value) return 'Weekly recap';
+    return new Date(value+'T12:00:00').toLocaleDateString('en-US',{month:'long',day:'numeric',year:'numeric'});
+  }
+  function recapAht(seconds){
+    const s=Math.max(0,Math.round(Number(seconds)||0));
+    return `${Math.floor(s/60)}:${String(s%60).padStart(2,'0')}`;
+  }
+  function buildRecapEmail(reportDate, rows, previousRows){
+    const prevRanks=new Map((previousRows||[]).map(r=>[String(r.team_id),Number(r.rank)]));
+    const ranked=[...rows].sort((a,b)=>Number(a.rank)-Number(b.rank));
+    const movements=ranked.map(r=>({...r,previousRank:prevRanks.get(String(r.team_id)),movement:prevRanks.has(String(r.team_id))?prevRanks.get(String(r.team_id))-Number(r.rank):null}));
+    const climber=movements.filter(r=>r.movement!==null && r.movement>0).sort((a,b)=>b.movement-a.movement)[0];
+    const closePairs=[];
+    for(let i=0;i<ranked.length-1;i++){
+      const a=ranked[i],b=ranked[i+1];
+      closePairs.push({a,b,gap:Math.abs(Number(a.overall_score)-Number(b.overall_score))});
+    }
+    closePairs.sort((a,b)=>a.gap-b.gap);
+    const closest=closePairs[0];
+    const bestBy=(key,dir=1)=>[...ranked].sort((a,b)=>(Number(a[key])-Number(b[key]))*dir)[0];
+    const csatLeader=bestBy('csat',-1), qaLeader=bestBy('qa',-1), ahtLeader=bestBy('aht_seconds',1);
+    const movementText=r=>r.movement===null?'Baseline week':r.movement>0?`▲ ${r.movement} place${r.movement===1?'':'s'}`:r.movement<0?`▼ ${Math.abs(r.movement)} place${Math.abs(r.movement)===1?'':'s'}`:'— No change';
+    const rowsHtml=movements.map(r=>`<tr><td style="padding:10px;border-bottom:1px solid #263348;color:#f4f7fb">${escapeRecapHtml(r.rank)}. ${escapeRecapHtml(r.team_name)}</td><td style="padding:10px;border-bottom:1px solid #263348;color:#f4f7fb">${Number(r.overall_score).toFixed(2)}%</td><td style="padding:10px;border-bottom:1px solid #263348;color:#c4d2e3">${escapeRecapHtml(movementText(r))}</td></tr>`).join('');
+    const teamOfWeek=ranked[0];
+    const movementBlock=climber?`<strong style="color:#ffd45a">${escapeRecapHtml(climber.team_name)}</strong> climbed ${climber.movement} place${climber.movement===1?'':'s'} this week.`:'No previous snapshot was available to calculate team movement.';
+    const closestBlock=closest?`${escapeRecapHtml(closest.a.team_name)} and ${escapeRecapHtml(closest.b.team_name)} were separated by ${closest.gap.toFixed(2)} points in the visible score.`:'Not enough teams were available to compare the closest race.';
+    const fullHtml=`<!doctype html>
+<html lang="en">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width"><title>FA Performance League — Friday Race Recap</title></head>
+<body style="margin:0;padding:0;background:#070d1b;color:#edf2ff;font-family:Arial,Helvetica,sans-serif">
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background:#070d1b"><tr><td align="center" style="padding:22px 10px">
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="max-width:720px;background:#0d172b;border:1px solid #293452;border-radius:14px;overflow:hidden">
+<tr><td style="padding:0;background:#10172b;border-bottom:4px solid #ff762e">
+<img src="https://sundayprojectsss.github.io/faperformanceleague/fa-performance-league-halloween-race-recap-banner.jpg" width="720" alt="FA Performance League — Friday Race Recap, Halloween Grand Prix" style="display:block;width:100%;max-width:720px;height:auto;border:0;outline:none;text-decoration:none;line-height:100%;-ms-interpolation-mode:bicubic" />
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0"><tr><td align="center" style="padding:10px 16px;background:#10172b;color:#c3cee5;font-size:12px;line-height:1.5;letter-spacing:1px">🎃 &nbsp; ${escapeRecapHtml(recapDateLabel(reportDate)).toUpperCase()} &nbsp; · &nbsp; WEEKLY RACE REPORT &nbsp; 🦇</td></tr></table>
+</td></tr>
+<tr><td style="padding:22px 20px 24px">
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background:#111d33;border:1px solid #35415e;border-radius:12px"><tr><td style="padding:18px;border-left:4px solid #ff812e">
+<div style="font-size:11px;letter-spacing:2px;color:#ffb34f;font-weight:bold">🏆 TEAM OF THE WEEK</div>
+<div style="font-size:27px;line-height:1.2;font-weight:bold;color:#ffffff;margin:8px 0">${escapeRecapHtml(teamOfWeek.team_name)}</div>
+<div style="font-size:16px;color:#f5f7ff;font-weight:bold">${Number(teamOfWeek.overall_score).toFixed(2)}% <span style="font-size:12px;font-weight:normal;color:#aebbd5">VISIBLE SCORE · RANK #1</span></div>
+<div style="height:5px;background:#28324d;margin-top:14px"><div style="height:5px;width:${Math.max(0,Math.min(100,Number(teamOfWeek.overall_score)))}%;background:#ff812e"></div></div>
+</td></tr></table>
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0"><tr><td height="18" style="font-size:0;line-height:0">&nbsp;</td></tr><tr><td style="padding:15px;background:#17182f;border:1px solid #3c3159;border-left:4px solid #b777ff;border-radius:9px"><div style="font-size:11px;letter-spacing:1.5px;color:#d5a6ff;font-weight:bold">⬆ BIGGEST CLIMBER</div><div style="margin-top:7px;color:#edf2ff;font-size:14px;line-height:1.5">${movementBlock}</div></td></tr><tr><td height="10" style="font-size:0;line-height:0">&nbsp;</td></tr><tr><td style="padding:15px;background:#111d33;border:1px solid #293d59;border-left:4px solid #41d9e8;border-radius:9px"><div style="font-size:11px;letter-spacing:1.5px;color:#41d9e8;font-weight:bold">⚡ CLOSEST RACE</div><div style="margin-top:7px;color:#edf2ff;font-size:14px;line-height:1.5">${closestBlock}</div></td></tr></table>
+<h2 style="margin:26px 0 12px;color:#ffffff;font-size:19px">🏁 Championship Standings</h2>
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="width:100%;border-collapse:collapse"><thead><tr><th align="left" style="padding:11px 8px;color:#ffb34f;border-bottom:2px solid #ff812e;font-size:11px;letter-spacing:1px">TEAM</th><th align="left" style="padding:11px 8px;color:#ffb34f;border-bottom:2px solid #ff812e;font-size:11px;letter-spacing:1px">SCORE</th><th align="left" style="padding:11px 8px;color:#ffb34f;border-bottom:2px solid #ff812e;font-size:11px;letter-spacing:1px">MOVEMENT</th></tr></thead><tbody>${rowsHtml}</tbody></table>
+<h2 style="margin:27px 0 12px;color:#ffffff;font-size:19px">✨ Performance Spotlight</h2>
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0"><tr><td style="padding:13px 14px;background:#111d33;border-left:3px solid #ffb34f"><strong style="color:#ffb34f">★ CSAT CHAMPION</strong><div style="margin-top:5px;color:#edf2ff">${escapeRecapHtml(csatLeader.team_name)} · ${Number(csatLeader.csat).toFixed(2)}%</div></td></tr><tr><td height="8" style="font-size:0;line-height:0">&nbsp;</td></tr><tr><td style="padding:13px 14px;background:#17182f;border-left:3px solid #b777ff"><strong style="color:#d5a6ff">◆ QA CHAMPION</strong><div style="margin-top:5px;color:#edf2ff">${escapeRecapHtml(qaLeader.team_name)} · ${Number(qaLeader.qa).toFixed(2)}%</div></td></tr><tr><td height="8" style="font-size:0;line-height:0">&nbsp;</td></tr><tr><td style="padding:13px 14px;background:#111d33;border-left:3px solid #41d9e8"><strong style="color:#41d9e8">⚡ AHT CHAMPION</strong><div style="margin-top:5px;color:#edf2ff">${escapeRecapHtml(ahtLeader.team_name)} · ${recapAht(ahtLeader.aht_seconds)}</div></td></tr></table>
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-top:26px"><tr><td align="center" style="padding:18px;background:#ff812e;border-radius:9px"><a href="#" style="display:inline-block;color:#11172a;text-decoration:none;font-weight:900;letter-spacing:1px;font-size:14px">OPEN PERFORMANCE LEAGUE &nbsp; →</a></td></tr></table>
+</td></tr>
+<tr><td align="center" style="padding:18px 16px 22px;background:#090f1e;border-top:1px solid #293452"><div style="font-size:12px;color:#b5c2dc;font-weight:bold;letter-spacing:1px">RACE FAIRLY. CELEBRATE PROGRESS. KEEP IMPROVING.</div><div style="font-size:18px;margin-top:9px">🏁 🎃 🏁</div></td></tr>
+</table></td></tr></table></body></html>`;
+    return {html:fullHtml,teamOfWeek,climber,closest};
+  }
+  async function generateWeeklyRecap(){
+    const status=document.getElementById('recapStatus');
+    const btn=document.getElementById('generateRecapBtn');
+    const reportDate=document.getElementById('recapDate').value;
+    status.className='recap-status'; status.textContent='Loading saved weekly snapshots…';
+    btn.disabled=true; btn.textContent='BUILDING…';
+    document.getElementById('downloadRecapBtn').disabled=true;
+    try{
+      if(!reportDate) throw new Error('Choose the report date first.');
+      const {data:rows,error}=await supabaseClient.from('weekly_race_snapshots')
+        .select('snapshot_date,team_id,team_name,team_color,csat,qa,aht_seconds,overall_score,rank')
+        .eq('snapshot_date',reportDate).order('rank',{ascending:true});
+      if(error) throw new Error(error.message);
+      if(!rows || rows.length===0) throw new Error(`No saved weekly snapshot was found for ${reportDate}. Capture the full snapshot in Supabase first.`);
+      if(rows.length!==7 || new Set(rows.map(r=>r.team_id)).size!==7 || new Set(rows.map(r=>Number(r.rank))).size!==7){
+        throw new Error(`The snapshot has ${rows.length} rows and is incomplete. Expected all 7 teams with unique ranks.`);
+      }
+      const {data:dates,error:dateError}=await supabaseClient.from('weekly_race_snapshots')
+        .select('snapshot_date').lt('snapshot_date',reportDate).order('snapshot_date',{ascending:false}).limit(1);
+      let previousRows=[];
+      if(!dateError && dates?.length){
+        const prevResult=await supabaseClient.from('weekly_race_snapshots')
+          .select('team_id,team_name,overall_score,rank').eq('snapshot_date',dates[0].snapshot_date);
+        if(!prevResult.error && prevResult.data?.length===7) previousRows=prevResult.data;
+      }
+      const report=buildRecapEmail(reportDate,rows,previousRows);
+      latestRecapHtml=report.html;
+      document.getElementById('recapPreviewBody').innerHTML=`<div style="color:#9fb1c6;font-size:11px;letter-spacing:1px">REPORT DATE · ${escapeRecapHtml(recapDateLabel(reportDate))}</div><div class="recap-hero">🏆 ${escapeRecapHtml(report.teamOfWeek.team_name)}</div><div style="color:#9fb1c6">Team of the Week · ${Number(report.teamOfWeek.overall_score).toFixed(2)}% visible score</div><p><strong style="color:#ffd45a">Biggest climber:</strong> ${report.climber?`${escapeRecapHtml(report.climber.team_name)} (+${report.climber.movement})`:'No previous snapshot available — movement not calculated.'}</p><p><strong style="color:#42e8ff">Closest race:</strong> ${report.closest?`${escapeRecapHtml(report.closest.a.team_name)} vs ${escapeRecapHtml(report.closest.b.team_name)} · ${report.closest.gap.toFixed(2)} point gap`:'Not available.'}</p>${report.html.match(/<table[\s\S]*?<\/table>/)?.[0]||''}<p style="color:#8fa4bd">Metric spotlight: CSAT — ${escapeRecapHtml(rows.sort((a,b)=>Number(b.csat)-Number(a.csat))[0].team_name)} · QA — ${escapeRecapHtml([...rows].sort((a,b)=>Number(b.qa)-Number(a.qa))[0].team_name)} · AHT — ${escapeRecapHtml([...rows].sort((a,b)=>Number(a.aht_seconds)-Number(b.aht_seconds))[0].team_name)}</p>`;
+      document.getElementById('recapPreview').hidden=false;
+      document.getElementById('downloadRecapBtn').disabled=false;
+      status.textContent=previousRows.length?'Preview generated using this week and the previous complete snapshot. Review it before sending.':'Preview generated. This is the baseline week, so movement is intentionally not reported.';
+      status.className='recap-status success';
+    }catch(err){
+      console.error('Weekly recap error:',err);
+      status.textContent=`Could not generate recap: ${err.message}. If this is a permissions error, we need to add a SELECT policy for authenticated staff on weekly_race_snapshots.`;
+      status.className='recap-status error';
+      document.getElementById('recapPreview').hidden=true;
+      latestRecapHtml='';
+    }finally{
+      btn.disabled=false; btn.textContent='GENERATE PREVIEW';
+    }
+  }
+  function downloadWeeklyRecap(){
+    if(!latestRecapHtml) return;
+    const blob=new Blob([latestRecapHtml],{type:'text/html;charset=utf-8'});
+    const url=URL.createObjectURL(blob);
+    const a=document.createElement('a');
+    a.href=url; a.download=`FA-Performance-League-Weekly-Recap-${document.getElementById('recapDate').value||'report'}.html`;
+    document.body.appendChild(a); a.click(); a.remove(); URL.revokeObjectURL(url);
+  }
+
   function wireStaffUI(){
     document.getElementById('staffAccessBtn').addEventListener('click',openStaffAccess);
     document.getElementById('staffLoginClose').addEventListener('click',()=>setOverlay('staffLoginOverlay',false));
@@ -1493,6 +1648,9 @@
     document.getElementById('staffLogoutBtn').addEventListener('click',signOutStaff);
     document.getElementById('staffRefreshBtn').addEventListener('click',refreshStaffPanel);
     document.getElementById('staffSaveBtn').addEventListener('click',saveStaffResults);
+    document.getElementById('generateRecapBtn').addEventListener('click',generateWeeklyRecap);
+    document.getElementById('downloadRecapBtn').addEventListener('click',downloadWeeklyRecap);
+    document.getElementById('recapDate').value = new Date().toISOString().slice(0,10);
 
     ['staffLoginOverlay','staffPanelOverlay'].forEach(id=>{
       document.getElementById(id).addEventListener('click',e=>{
