@@ -107,7 +107,7 @@
 
   .milestones{display:grid;grid-template-columns:repeat(4,1fr);gap:7px;margin-top:12px}
 
-  .average-metrics{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin-top:12px}
+  .average-metrics{display:grid;grid-template-columns:minmax(0,1fr);gap:8px;margin-top:12px;max-width:280px}
   .average-metric{padding:10px 11px;border-radius:12px;background:rgba(5,16,28,.58);border:1px solid var(--metric-border);min-width:0}
   .average-metric-top{display:flex;justify-content:space-between;align-items:center;gap:8px}
   .average-metric-label{font-size:10px;color:#9bb0c6;font-weight:800;letter-spacing:.08em;text-transform:uppercase}
@@ -501,13 +501,13 @@
       <div class="brand-mark"><span>🏁</span></div>
       <div>
         <h1>First American Performance League</h1>
-        <div class="subtitle">CSAT leads the scoring. QA and AHT help each team reach the account targets.</div>
+        <div class="subtitle">The highest CSAT wins. The 64% goal is tracked separately.</div>
         <div class="seasonal-tag">🎃 Halloween Edition <span aria-hidden="true">✦</span> Spooky Race Season</div>
       </div>
     </div>
     <div class="top-stats">
       <div class="pill">Season <strong id="seasonLabel">01</strong></div>
-      <div class="pill">Weights <strong id="weightLabel">40 / 30 / 30</strong></div>
+      <div class="pill">Competition <strong id="weightLabel">CSAT ONLY</strong></div>
       <div class="pill">Updated <strong id="updatedLabel">—</strong></div>
       <div class="pill">Leader <strong id="leaderLabel">—</strong></div>
       <button class="staff-btn" id="staffAccessBtn" type="button">🔐 Staff</button>
@@ -519,7 +519,7 @@
       <div class="race-header">
         <div>
           <h2>🎃 Haunted Championship Circuit</h2>
-          <p>Race through the haunted circuit. Every car position is still driven by the weighted performance score.</p>
+          <p>Race through the haunted circuit. Car positions follow each team’s actual CSAT percentage.</p>
         </div>
         <div class="leader-badge"><span class="leader-dot"></span><span id="leaderBadge">Loading standings…</span></div>
       </div>
@@ -527,7 +527,7 @@
       <div class="track-head">
         <div>Teams</div>
         <div class="scale"><span>Start</span><span>25%</span><span>50%</span><span>75%</span><span>Finish</span></div>
-        <div style="text-align:right">Score</div>
+        <div style="text-align:right">CSAT</div>
       </div>
       <div id="lanes" class="lanes"></div>
 
@@ -543,7 +543,7 @@
 
     <aside class="panel standings">
       <h2>🏆 Spooky Standings</h2>
-      <div class="section-note">Ranking is based on CSAT 40% + QA 30% + AHT 30%.</div>
+      <div class="section-note">Ranking is based on raw CSAT, highest to lowest. Exact ties share the same rank.</div>
       <div id="standingList"></div>
     </aside>
   </main>
@@ -554,7 +554,7 @@
         <span class="big-dot" id="detailDot"></span>
         <div>
           <h2 class="detail-title" id="detailName">Select a team</h2>
-          <div class="detail-meta" id="detailMeta">Click any team to inspect its metric breakdown.</div>
+          <div class="detail-meta" id="detailMeta">Click any team to inspect its CSAT performance.</div>
         </div>
       </div>
       <div class="big-score"><span id="detailScore">—</span><small>%</small></div>
@@ -564,7 +564,7 @@
       <div>
         <div class="performance-block">
           <div class="block-heading">
-            <strong>🎃 Overall performance</strong>
+            <strong>🎃 CSAT race progress</strong>
             <span id="detailStatus">—</span>
           </div>
           <div class="score-meter"><i id="detailMeter"></i></div>
@@ -575,14 +575,14 @@
             <div class="milestone" id="m75"><b>75%</b><span>Sprint</span></div>
             <div class="milestone" id="m100"><b>100%</b><span>Finish</span></div>
           </div>
-          <div class="average-metrics" id="averageMetrics" aria-label="Current team metric averages"></div>
-          <div class="formula">Performance = <strong>CSAT × 40%</strong> + <strong>QA × 30%</strong> + <strong>AHT Score × 30%</strong></div>
-          <div class="config-note" id="targetNote">Target scoring: reaching the account target earns 100 points for that metric; results below target are scaled proportionally.</div>
+          <div class="average-metrics" id="averageMetrics" aria-label="Current team CSAT status"></div>
+          <div class="formula">Race score = <strong>actual CSAT percentage</strong></div>
+          <div class="config-note" id="targetNote">Teams are ranked by raw CSAT. Guatemala target: 64%.</div>
         </div>
       </div>
 
       <div>
-        <div class="block-heading"><strong>🕯️ Metric breakdown</strong><span id="selectedRank">—</span></div>
+        <div class="block-heading"><strong>🕯️ CSAT performance</strong><span id="selectedRank">—</span></div>
         <div id="metricList" class="metric-list"></div>
       </div>
     </div>
@@ -616,7 +616,7 @@
     <div class="staff-head">
       <div>
         <h2 class="staff-title">🏁 Staff Control Center</h2>
-        <div class="staff-sub">Update team metrics here. The race score, targets, standings and event engine recalculate automatically after saving.</div>
+        <div class="staff-sub">Update team CSAT only. Standings, car positions and race events recalculate automatically after saving.</div>
       </div>
       <div class="staff-head-actions">
         <button class="secondary-btn" id="staffLogoutBtn" type="button">Sign out</button>
@@ -625,30 +625,27 @@
     </div>
 
     <div class="staff-kpis">
-      <div class="staff-kpi"><small>CSAT weight</small><strong id="staffKpiCsat">40%</strong></div>
-      <div class="staff-kpi"><small>QA weight</small><strong id="staffKpiQa">30%</strong></div>
-      <div class="staff-kpi"><small>AHT weight</small><strong id="staffKpiAht">30%</strong></div>
+      <div class="staff-kpi"><small>Competition metric</small><strong>CSAT only</strong></div>
+      <div class="staff-kpi"><small>CSAT target</small><strong id="staffKpiCsat">64%</strong></div>
+      <div class="staff-kpi"><small>Teams</small><strong id="staffTeamCount">7</strong></div>
       <div class="staff-kpi"><small>Last sync</small><strong id="staffKpiSync">—</strong></div>
     </div>
 
     <div class="staff-settings">
       <div class="staff-setting"><small>CSAT target</small><strong id="staffTargetCsat">64%</strong></div>
-      <div class="staff-setting"><small>QA target</small><strong id="staffTargetQa">90%</strong></div>
-      <div class="staff-setting"><small>AHT target</small><strong id="staffTargetAht">12:15</strong></div>
-      <div class="staff-setting"><small>Scoring cap</small><strong>100%</strong></div>
-      <div class="staff-setting"><small>Teams</small><strong id="staffTeamCount">7</strong></div>
-      <div class="staff-setting"><small>History</small><strong>Automatic</strong></div>
+      <div class="staff-setting"><small>Ranking rule</small><strong>Highest CSAT wins</strong></div>
+      <div class="staff-setting"><small>History</small><strong>Preserved</strong></div>
     </div>
 
     <div class="staff-view-note">
-      <strong>How it works:</strong> CSAT is weighted at 40%, QA at 30%, and AHT at 30%. A metric reaches 100 points when its account target is met; overall performance stays capped at 100%. Saving a metric update also creates the next history snapshot automatically.
+      <strong>LIVE DATA WARNING:</strong> This development copy connects to the production Supabase project. Saving changes updates only the CSAT field for each changed team and affects the live league immediately. One confirmation covers the listed changes. Supabase will also run its existing history trigger for each update. Continue only when the listed values are correct.
     </div>
 
     <section class="recap-panel" aria-labelledby="weeklyRecapTitle">
       <div class="recap-head">
         <div>
           <h3 id="weeklyRecapTitle">🏁 Friday Race Recap</h3>
-          <p>Build a weekly, email-ready race recap using the league’s saved weekly snapshots. Generate a preview first; nothing is emailed automatically and the public race is not changed.</p>
+          <p>Build a weekly email recap ranked by CSAT only. Historical weighted scores are ignored; generate a preview first. Nothing is emailed automatically.</p>
         </div>
         <span class="target-chip good">STAFF ONLY</span>
       </div>
@@ -672,10 +669,8 @@
           <tr>
             <th>Team</th>
             <th>CSAT %</th>
-            <th>QA %</th>
-            <th>AHT seconds</th>
-            <th>Targets</th>
-            <th>Current performance</th>
+            <th>Target status</th>
+            <th>League position</th>
           </tr>
         </thead>
         <tbody id="staffTeamsBody"></tbody>
@@ -686,7 +681,7 @@
       <div class="staff-message" id="staffSaveMessage"></div>
       <div class="staff-head-actions">
         <button class="secondary-btn" id="staffRefreshBtn" type="button">↻ Refresh</button>
-        <button class="primary-btn" id="staffSaveBtn" type="button">SAVE RESULTS</button>
+        <button class="primary-btn" id="staffSaveBtn" type="button" title="Save changed CSAT values to the live Supabase project after confirmation">SAVE CSAT TO LIVE SUPABASE</button>
       </div>
     </div>
   </div>
@@ -740,10 +735,10 @@
   let replayableEvents = [];
 
   const STORAGE = {
-    snapshot: 'ccl_last_snapshot_v1',
-    seen: 'ccl_seen_events_v1',
-    bests: 'ccl_personal_bests_v1',
-    replay: 'ccl_replay_events_v1'
+    snapshot: 'ccl_last_snapshot_csat_dev_v2',
+    seen: 'ccl_seen_events_csat_dev_v2',
+    bests: 'ccl_personal_bests_csat_dev_v2',
+    replay: 'ccl_replay_events_csat_dev_v2'
   };
 
   function clamp(n,min,max){
@@ -828,19 +823,15 @@
   }
 
   function targetCount(team){
-    return ['csat','qa','aht'].filter(key => metricTargetMet(team,key)).length;
+    return Number(team?.metrics?.csat) >= Number(config.targets?.csat ?? 64) ? 1 : 0;
   }
 
   function statusFor(team){
-    const count = targetCount(team);
-    if(count === 3) return 'Target Master';
-    if(count === 2) return '2 of 3 targets';
-    if(count === 1) return '1 of 3 targets';
-    return 'Building momentum';
+    return metricTargetMet(team,'csat') ? 'CSAT target met' : 'Below CSAT target';
   }
 
   function metricStatus(team, key){
-    return metricTargetMet(team,key) ? 'ON TARGET' : 'BELOW TARGET';
+    return metricTargetMet(team,'csat') ? 'ON TARGET' : 'BELOW TARGET';
   }
 
   function metricTargetText(team, key){
@@ -870,28 +861,18 @@
   }
 
   function calculateTeam(team){
-    const csatRatio = rawMetricRatio(team,'csat');
-    const qaRatio = rawMetricRatio(team,'qa');
-    const ahtRatio = rawMetricRatio(team,'aht');
-    const rawPerformance = (csatRatio*config.weights.csat + qaRatio*config.weights.qa + ahtRatio*config.weights.aht) * 100;
-    const csat = metricScore(team,'csat');
-    const qa = metricScore(team,'qa');
-    const aht = metricScore(team,'aht');
-    const score = clamp(rawPerformance,0,100);
-    const targetsHit = targetCount(team);
+    const actual = Number(team?.metrics?.csat);
+    const csat = Number.isFinite(actual) ? clamp(actual,0,100) : 0;
+    const targetsHit = csat >= Number(config.targets?.csat ?? 64) ? 1 : 0;
     return {
       ...team,
-      score,
-      rawPerformance,
-      targetMargin: Math.max(rawPerformance-100,0),
-      metricScores: {csat,qa,aht},
+      score: csat,
+      rawPerformance: csat,
+      targetMargin: Math.max(csat - Number(config.targets?.csat ?? 64),0),
+      metricScores: {csat},
       targetsHit,
-      allTargetsMet: targetsHit === 3,
-      contributions: {
-        csat: csat*config.weights.csat,
-        qa: qa*config.weights.qa,
-        aht: aht*config.weights.aht
-      }
+      allTargetsMet: targetsHit === 1,
+      contributions: {csat}
     };
   }
 
@@ -1020,8 +1001,8 @@
 
   async function loadFromSupabase(){
     const [{data:settingsRow,error:settingsError},{data:teamRows,error:teamsError}] = await Promise.all([
-      supabaseClient.from('league_settings').select('id,csat_weight,qa_weight,aht_weight,csat_target,qa_target,aht_target_seconds,updated_at').eq('id',1).single(),
-      supabaseClient.from('teams').select('id,name,color,csat,qa,aht_seconds,updated_at').order('id',{ascending:true})
+      supabaseClient.from('league_settings').select('id,csat_target,updated_at').eq('id',1).single(),
+      supabaseClient.from('teams').select('id,name,color,csat,updated_at').order('id',{ascending:true})
     ]);
 
     if(settingsError) throw settingsError;
@@ -1038,27 +1019,15 @@
       season: '01',
       lastUpdated: Number.isFinite(latestUpdate) && latestUpdate > 0 ? new Date(latestUpdate).toISOString() : new Date().toISOString(),
       settings: {
-        weights: {
-          csat: Number(settingsRow.csat_weight ?? 0.40),
-          qa: Number(settingsRow.qa_weight ?? 0.30),
-          aht: Number(settingsRow.aht_weight ?? 0.30)
-        },
-        targets: {
-          csat: Number(settingsRow.csat_target ?? 64),
-          qa: Number(settingsRow.qa_target ?? 90),
-          ahtSeconds: Number(settingsRow.aht_target_seconds ?? 735)
-        },
+        weights: {csat:1,qa:0,aht:0},
+        targets: {csat: Number(settingsRow.csat_target ?? 64),qa:90,ahtSeconds:735},
         events: { enabled:true, toastDurationMs:6200, pollMs:30000 }
       },
       teams: teamRows.map(row=>({
         id:Number(row.id),
         name:row.name,
         color:row.color,
-        metrics:{
-          csat:Number(row.csat),
-          qa:Number(row.qa),
-          ahtSeconds:Number(row.aht_seconds)
-        },
+        metrics:{csat:Number(row.csat)},
         updatedAt:row.updated_at
       }))
     };
@@ -1101,7 +1070,7 @@
       season: fallbackData.season,
       order: sortedTeams.map(t=>t.id),
       teams: Object.fromEntries(sortedTeams.map((t,index)=>[String(t.id),{
-        rank:index+1,
+        rank:t.rank || index+1,
         score:Number(t.score.toFixed(4)),
         rawPerformance:Number(t.rawPerformance.toFixed(4)),
         targetsHit:t.targetsHit,
@@ -1175,14 +1144,14 @@
       if(!prev.allTargetsMet && now.allTargetsMet){
         events.push({
           id:eventId('target_master',[id],stamp),type:'target',icon:'🏆🎃',label:'TARGET MASTER',
-          title:`${team.name} <span>hit all 3 targets</span>`,
-          message:`CSAT, QA and AHT are all on target. The team has reached Target Mastery.`,teamId:id
+          title:`${team.name} <span>hit the CSAT target</span>`,
+          message:`The team has reached the Guatemala CSAT goal of 64%.`,teamId:id
         });
       }else if(prev.allTargetsMet && !now.allTargetsMet){
         events.push({
           id:eventId('target_lost',[id],stamp),type:'warning',icon:'👻',label:'TARGET UPDATE',
-          title:`${team.name} <span>left Target Mastery</span>`,
-          message:`One or more account targets are no longer being met.`,teamId:id
+          title:`${team.name} <span>dropped below the CSAT target</span>`,
+          message:`The team's CSAT is now below the Guatemala goal of 64%.`,teamId:id
         });
       }
     });
@@ -1379,71 +1348,43 @@
   }
 
   function staffTargetsHit(team){
-    const targetCsat=Number(config.targets.csat);
-    const targetQa=Number(config.targets.qa);
-    const targetAht=Number(config.targets.ahtSeconds);
-    return [
-      Number(team.metrics.csat)>=targetCsat,
-      Number(team.metrics.qa)>=targetQa,
-      Number(team.metrics.ahtSeconds)<=targetAht
-    ].filter(Boolean).length;
+    return Number(team.metrics.csat) >= Number(config.targets.csat) ? 1 : 0;
   }
 
   function populateStaffRows(data){
     config = {
-      weights: normalizeWeights(data.settings?.weights),
-      targets: {
-        csat: Number(data.settings?.targets?.csat ?? 64),
-        qa: Number(data.settings?.targets?.qa ?? 90),
-        ahtSeconds: Number(data.settings?.targets?.ahtSeconds ?? 735)
-      },
-      events: {
-        enabled: data.settings?.events?.enabled !== false,
-        toastDurationMs: Number(data.settings?.events?.toastDurationMs ?? 6200),
-        pollMs: Number(data.settings?.events?.pollMs ?? 30000)
-      }
+      weights: {csat:1,qa:0,aht:0},
+      targets: {csat:64,qa:90,ahtSeconds:735},
+      events: {enabled:data.settings?.events?.enabled !== false,toastDurationMs:Number(data.settings?.events?.toastDurationMs ?? 6200),pollMs:Number(data.settings?.events?.pollMs ?? 30000)}
     };
-
-    document.getElementById('staffKpiCsat').textContent = `${Math.round(config.weights.csat*100)}%`;
-    document.getElementById('staffKpiQa').textContent = `${Math.round(config.weights.qa*100)}%`;
-    document.getElementById('staffKpiAht').textContent = `${Math.round(config.weights.aht*100)}%`;
+    document.getElementById('staffKpiCsat').textContent = `${Math.round(config.targets.csat)}%`;
     document.getElementById('staffKpiSync').textContent = formatUpdatedAt(data.lastUpdated);
     document.getElementById('staffTargetCsat').textContent = `${Math.round(config.targets.csat)}%`;
-    document.getElementById('staffTargetQa').textContent = `${Math.round(config.targets.qa)}%`;
-    document.getElementById('staffTargetAht').textContent = formatAHT(config.targets.ahtSeconds);
     document.getElementById('staffTeamCount').textContent = String(data.teams?.length || 0);
 
     const body=document.getElementById('staffTeamsBody');
     body.innerHTML='';
-    const sorted=(data.teams||[]).slice().sort((a,b)=>a.id-b.id);
-
-    sorted.forEach(team=>{
-      const calculated=calculateTeam({
-        ...team,
-        metrics:{...team.metrics}
-      });
+    const sorted=(data.teams||[]).slice().sort((a,b)=>Number(b.metrics.csat)-Number(a.metrics.csat) || a.id-b.id).map((team,index,arr)=>({...team,rank:index===0?1:(Math.abs(Number(team.metrics.csat)-Number(arr[index-1].metrics.csat))<0.0001?arr[index-1].rank:index+1)}));
+    sorted.forEach((team,index)=>{
       const met=staffTargetsHit(team);
       const tr=document.createElement('tr');
       tr.dataset.id=team.id;
       tr.innerHTML=`
-        <td>
-          <div class="staff-team">
-            <span class="staff-color" style="background:${team.color}"></span>
-            <span>${team.name}</span>
-          </div>
-        </td>
-        <td><input class="staff-input" data-field="csat" type="number" min="0" max="100" step="0.1" value="${Number(team.metrics.csat)}"></td>
-        <td><input class="staff-input" data-field="qa" type="number" min="0" max="100" step="0.1" value="${Number(team.metrics.qa)}"></td>
-        <td><input class="staff-input" data-field="ahtSeconds" type="number" min="1" step="1" value="${Number(team.metrics.ahtSeconds)}"></td>
-        <td><span class="staff-status-chip ${met===3?'good':'warn'}">${met}/3 targets</span></td>
-        <td><strong>${oneDecimal(calculated.score)}%</strong></td>
-      `;
+        <td><div class="staff-team"><span class="staff-color" style="background:${team.color}"></span><span>${team.name}</span></div></td>
+        <td><input class="staff-input" data-field="csat" type="number" min="0" max="100" step="0.1" value="${Number(team.metrics.csat)}" aria-label="CSAT for ${team.name}" title="CSAT changes are saved to live Supabase after confirmation"></td>
+        <td><span class="staff-status-chip ${met?'good':'warn'}">${met?'TARGET MET':'BELOW 64%'}</span></td>
+        <td><strong>#${team.rank}</strong></td>`;
       body.appendChild(tr);
     });
+  }
 
-    body.querySelectorAll('.staff-input').forEach(input=>{
-      input.addEventListener('input',()=>input.classList.remove('invalid'));
-    });
+  let developmentBaseData = null;
+
+  // This development build intentionally ignores previously saved local-preview overrides.
+  // Staff rows always start from the latest values read directly from Supabase.
+  function applyDevelopmentOverrides(data){
+    developmentBaseData = data;
+    return data;
   }
 
   async function refreshStaffPanel(){
@@ -1454,76 +1395,117 @@
       return;
     }
     updateStaffButton(true);
-    const data=await loadData();
-    if(window.__lastDataSource==='data.json'){
-      document.getElementById('staffSaveMessage').textContent='Warning: Supabase is not available. Editing is disabled until the live data source is reachable.';
-      document.getElementById('staffSaveMessage').className='staff-message error';
-      document.getElementById('staffSaveBtn').disabled=true;
-    }else{
-      document.getElementById('staffSaveMessage').textContent='';
+    try{
+      const data=await loadFromSupabase();
+      window.__lastDataSource='supabase';
+      developmentBaseData=data;
+      document.getElementById('staffSaveMessage').textContent='Connected to live Supabase. Saving changes production data and creates a history entry. Each team update asks for confirmation.';
       document.getElementById('staffSaveMessage').className='staff-message';
       document.getElementById('staffSaveBtn').disabled=false;
+      document.getElementById('staffSaveBtn').title='Save changed CSAT values to the live Supabase project after confirmation';
+      document.getElementById('staffSaveBtn').textContent='SAVE CSAT TO LIVE SUPABASE';
+      populateStaffRows(data);
+    }catch(err){
+      console.error('Could not load live data for Staff panel:',err);
+      document.getElementById('staffSaveMessage').textContent='Could not load live Supabase data. Refresh and try again; no changes were saved.';
+      document.getElementById('staffSaveMessage').className='staff-message error';
+      document.getElementById('staffSaveBtn').disabled=true;
     }
-    populateStaffRows(data);
   }
 
   async function saveStaffResults(){
-    const btn=document.getElementById('staffSaveBtn');
     const msg=document.getElementById('staffSaveMessage');
+    const btn=document.getElementById('staffSaveBtn');
     const rows=[...document.querySelectorAll('#staffTeamsBody tr')];
-    if(!rows.length) return;
-
-    const updates=[];
-    let invalid=false;
-
-    rows.forEach(row=>{
-      const id=Number(row.dataset.id);
-      const values={id};
-      row.querySelectorAll('.staff-input').forEach(input=>{
-        const field=input.dataset.field;
-        const raw=Number(input.value);
-        const valid=field==='ahtSeconds' ? Number.isFinite(raw)&&raw>0 : Number.isFinite(raw)&&raw>=0&&raw<=100;
-        input.classList.toggle('invalid',!valid);
-        if(!valid) invalid=true;
-        values[field]=raw;
-      });
-      updates.push(values);
-    });
-
-    if(invalid){
-      msg.textContent='Please correct the highlighted values before saving.';
-      msg.className='staff-message error';
-      return;
-    }
-
-    btn.disabled=true;
-    btn.textContent='SAVING…';
+    const pending=[];
     msg.textContent='';
     msg.className='staff-message';
 
+    // Validate the entire form before making any production write.
+    for(const row of rows){
+      const input=row.querySelector('input[data-field="csat"]');
+      const raw=input?.value?.trim();
+      const value=raw==='' ? NaN : Number(raw);
+      if(!input || !Number.isFinite(value) || value<0 || value>100){
+        msg.textContent='Please enter a valid CSAT from 0 to 100 for every team.';
+        msg.className='staff-message error';
+        input?.classList.add('invalid');
+        input?.focus();
+        return;
+      }
+      input.classList.remove('invalid');
+      pending.push({row,input,teamId:Number(row.dataset.id),value});
+    }
+
+    btn.disabled=true;
+    const saved=[];
     try{
-      for(const update of updates){
-        const {error}=await supabaseClient.from('teams').update({
-          csat:update.csat,
-          qa:update.qa,
-          aht_seconds:update.ahtSeconds
-        }).eq('id',update.id);
-        if(error) throw error;
+      const session=await getCurrentSession();
+      if(!session?.user?.id) throw new Error('Your Staff session has expired. Sign in again before saving.');
+
+      // Fetch directly from Supabase: never allow fallback data to be written.
+      const fresh=await loadFromSupabase();
+      const changed=pending.map(item=>{
+        const current=fresh.teams.find(t=>Number(t.id)===item.teamId);
+        if(!current) throw new Error(`Team ID ${item.teamId} is no longer available in Supabase.`);
+        return {...item,current};
+      }).filter(item=>Math.abs(Number(item.value)-Number(item.current.metrics.csat))>0.0001);
+
+      if(!changed.length){
+        msg.textContent='No changes detected. Supabase was not modified.';
+        msg.className='staff-message';
+        return;
       }
 
-      msg.textContent='Saved successfully. Race calculations and history were updated.';
-      msg.className='staff-message success';
+      const changeSummary=changed.map(item=>`• ${item.current.name}: ${Number(item.current.metrics.csat).toFixed(1)}% → ${Number(item.value).toFixed(1)}%`).join('\n');
+      const promptText=`SAVE CSAT UPDATES TO THE LIVE PERFORMANCE LEAGUE?\n\n${changeSummary}\n\nOnly the teams.csat field will be updated for these teams. QA and AHT values will not be changed. The existing Supabase trigger will create a race_history entry for each update, containing the current CSAT, QA and AHT values.\n\nThese changes affect the published league immediately. Continue?`;
+      if(!window.confirm(promptText)){
+        msg.textContent='Cancelled. No Supabase changes were made.';
+        msg.className='staff-message';
+        return;
+      }
+      for(const item of changed){
+        msg.textContent=`Saving CSAT for ${item.current.name} (${saved.length+1} of ${changed.length})…`;
+        msg.className='staff-message';
+        const {data,error}=await supabaseClient
+          .from('teams')
+          .update({csat:Number(item.value)})
+          .eq('id',item.teamId)
+          .select('id,name,csat,updated_at')
+          .single();
+        if(error) throw error;
+        if(!data || Number(data.id)!==item.teamId) throw new Error(`Supabase did not confirm the update for ${item.current.name}.`);
+        saved.push({id:item.teamId,name:data.name,csat:Number(data.csat)});
+      }
 
-      const fresh=await loadData();
-      render(fresh);
-      populateStaffRows(fresh);
+      // Always refresh from production after a completed write or a partial run.
+      const refreshed=await loadFromSupabase();
+      developmentBaseData=refreshed;
+      render(refreshed);
+      populateStaffRows(refreshed);
+      if(saved.length){
+        msg.textContent=`Saved ${saved.length} CSAT update(s) to live Supabase: ${saved.map(x=>`${x.name} (${x.csat.toFixed(1)}%)`).join(', ')}. History was triggered by Supabase.`;
+        msg.className='staff-message success';
+      }else{
+        msg.textContent='No changes were saved. Live data has been refreshed.';
+        msg.className='staff-message';
+      }
     }catch(err){
-      console.error(err);
-      msg.textContent='The changes could not be saved. Check your staff session and Supabase policies.';
+      console.error('CSAT save failed:',err);
+      let detail=err?.message || 'Unknown error';
+      if(err?.code==='42501' || /row-level security|permission denied|not allowed/i.test(detail)){
+        detail='Supabase denied the update. Confirm that this signed-in user is in staff_users and the Staff update policy allows the operation.';
+      }
+      msg.textContent=(saved.length?`Saved ${saved.length} update(s) before the error. `:'')+`Could not complete CSAT save: ${detail}`;
       msg.className='staff-message error';
+      try{
+        const refreshed=await loadFromSupabase();
+        developmentBaseData=refreshed;
+        render(refreshed);
+        populateStaffRows(refreshed);
+      }catch(refreshError){ console.warn('Refresh after save failure also failed:',refreshError); }
     }finally{
       btn.disabled=false;
-      btn.textContent='SAVE RESULTS';
     }
   }
 
@@ -1542,50 +1524,36 @@
     return `${Math.floor(s/60)}:${String(s%60).padStart(2,'0')}`;
   }
   function buildRecapEmail(reportDate, rows, previousRows){
-    const prevRanks=new Map((previousRows||[]).map(r=>[String(r.team_id),Number(r.rank)]));
-    const ranked=[...rows].sort((a,b)=>Number(a.rank)-Number(b.rank));
+    const sortByCsat = list => [...(list||[])].sort((a,b)=>Number(b.csat)-Number(a.csat) || String(a.team_name).localeCompare(String(b.team_name)));
+    const assignRanks=list=>sortByCsat(list).map((r,i,arr)=>({...r,rank:i===0?1:(Math.abs(Number(r.csat)-Number(arr[i-1].csat))<0.0001?arr[i-1].rank:i+1)}));
+    const ranked=assignRanks(rows);
+    const previousRanked=assignRanks(previousRows);
+    const prevRanks=new Map(previousRanked.map(r=>[String(r.team_id),Number(r.rank)]));
     const movements=ranked.map(r=>({...r,previousRank:prevRanks.get(String(r.team_id)),movement:prevRanks.has(String(r.team_id))?prevRanks.get(String(r.team_id))-Number(r.rank):null}));
     const climber=movements.filter(r=>r.movement!==null && r.movement>0).sort((a,b)=>b.movement-a.movement)[0];
     const closePairs=[];
     for(let i=0;i<ranked.length-1;i++){
       const a=ranked[i],b=ranked[i+1];
-      closePairs.push({a,b,gap:Math.abs(Number(a.overall_score)-Number(b.overall_score))});
+      closePairs.push({a,b,gap:Math.abs(Number(a.csat)-Number(b.csat))});
     }
     closePairs.sort((a,b)=>a.gap-b.gap);
     const closest=closePairs[0];
-    const bestBy=(key,dir=1)=>[...ranked].sort((a,b)=>(Number(a[key])-Number(b[key]))*dir)[0];
-    const csatLeader=bestBy('csat',-1), qaLeader=bestBy('qa',-1), ahtLeader=bestBy('aht_seconds',1);
+    const csatLeader=ranked[0];
     const movementText=r=>r.movement===null?'Baseline week':r.movement>0?`▲ ${r.movement} place${r.movement===1?'':'s'}`:r.movement<0?`▼ ${Math.abs(r.movement)} place${Math.abs(r.movement)===1?'':'s'}`:'— No change';
-    const rowsHtml=movements.map(r=>`<tr><td style="padding:10px;border-bottom:1px solid #263348;color:#f4f7fb">${escapeRecapHtml(r.rank)}. ${escapeRecapHtml(r.team_name)}</td><td style="padding:10px;border-bottom:1px solid #263348;color:#f4f7fb">${Number(r.overall_score).toFixed(2)}%</td><td style="padding:10px;border-bottom:1px solid #263348;color:#c4d2e3">${escapeRecapHtml(movementText(r))}</td></tr>`).join('');
+    const rowsHtml=movements.map(r=>`<tr><td style="padding:10px;border-bottom:1px solid #263348;color:#f4f7fb">${escapeRecapHtml(r.rank)}. ${escapeRecapHtml(r.team_name)}</td><td style="padding:10px;border-bottom:1px solid #263348;color:#f4f7fb">${Number(r.csat).toFixed(2)}%</td><td style="padding:10px;border-bottom:1px solid #263348;color:#c4d2e3">${escapeRecapHtml(movementText(r))}</td></tr>`).join('');
     const teamOfWeek=ranked[0];
     const movementBlock=climber?`<strong style="color:#ffd45a">${escapeRecapHtml(climber.team_name)}</strong> climbed ${climber.movement} place${climber.movement===1?'':'s'} this week.`:'No previous snapshot was available to calculate team movement.';
-    const closestBlock=closest?`${escapeRecapHtml(closest.a.team_name)} and ${escapeRecapHtml(closest.b.team_name)} were separated by ${closest.gap.toFixed(2)} points in the visible score.`:'Not enough teams were available to compare the closest race.';
+    const closestBlock=closest?`${escapeRecapHtml(closest.a.team_name)} and ${escapeRecapHtml(closest.b.team_name)} were separated by ${closest.gap.toFixed(2)} CSAT points.`:'Not enough teams were available to compare the closest race.';
+    const targetStatus=Number(teamOfWeek.csat)>=64?'The winning team also met the 64% CSAT target.':'The winning team is below the 64% CSAT target; the highest CSAT still wins the race.';
     const fullHtml=`<!doctype html>
-<html lang="en">
-<head><meta charset="utf-8"><meta name="viewport" content="width=device-width"><title>FA Performance League — Friday Race Recap</title></head>
-<body style="margin:0;padding:0;background:#070d1b;color:#edf2ff;font-family:Arial,Helvetica,sans-serif">
-<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background:#070d1b"><tr><td align="center" style="padding:22px 10px">
-<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="max-width:720px;background:#0d172b;border:1px solid #293452;border-radius:14px;overflow:hidden">
-<tr><td style="padding:0;background:#10172b;border-bottom:4px solid #ff762e">
-<img src="https://sundayprojectsss.github.io/faperformanceleague/fa-performance-league-halloween-race-recap-banner.jpg" width="720" alt="FA Performance League — Friday Race Recap, Halloween Grand Prix" style="display:block;width:100%;max-width:720px;height:auto;border:0;outline:none;text-decoration:none;line-height:100%;-ms-interpolation-mode:bicubic" />
-<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0"><tr><td align="center" style="padding:10px 16px;background:#10172b;color:#c3cee5;font-size:12px;line-height:1.5;letter-spacing:1px">🎃 &nbsp; ${escapeRecapHtml(recapDateLabel(reportDate)).toUpperCase()} &nbsp; · &nbsp; WEEKLY RACE REPORT &nbsp; 🦇</td></tr></table>
-</td></tr>
-<tr><td style="padding:22px 20px 24px">
-<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background:#111d33;border:1px solid #35415e;border-radius:12px"><tr><td style="padding:18px;border-left:4px solid #ff812e">
-<div style="font-size:11px;letter-spacing:2px;color:#ffb34f;font-weight:bold">🏆 TEAM OF THE WEEK</div>
-<div style="font-size:27px;line-height:1.2;font-weight:bold;color:#ffffff;margin:8px 0">${escapeRecapHtml(teamOfWeek.team_name)}</div>
-<div style="font-size:16px;color:#f5f7ff;font-weight:bold">${Number(teamOfWeek.overall_score).toFixed(2)}% <span style="font-size:12px;font-weight:normal;color:#aebbd5">VISIBLE SCORE · RANK #1</span></div>
-<div style="height:5px;background:#28324d;margin-top:14px"><div style="height:5px;width:${Math.max(0,Math.min(100,Number(teamOfWeek.overall_score)))}%;background:#ff812e"></div></div>
-</td></tr></table>
-<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0"><tr><td height="18" style="font-size:0;line-height:0">&nbsp;</td></tr><tr><td style="padding:15px;background:#17182f;border:1px solid #3c3159;border-left:4px solid #b777ff;border-radius:9px"><div style="font-size:11px;letter-spacing:1.5px;color:#d5a6ff;font-weight:bold">⬆ BIGGEST CLIMBER</div><div style="margin-top:7px;color:#edf2ff;font-size:14px;line-height:1.5">${movementBlock}</div></td></tr><tr><td height="10" style="font-size:0;line-height:0">&nbsp;</td></tr><tr><td style="padding:15px;background:#111d33;border:1px solid #293d59;border-left:4px solid #41d9e8;border-radius:9px"><div style="font-size:11px;letter-spacing:1.5px;color:#41d9e8;font-weight:bold">⚡ CLOSEST RACE</div><div style="margin-top:7px;color:#edf2ff;font-size:14px;line-height:1.5">${closestBlock}</div></td></tr></table>
-<h2 style="margin:26px 0 12px;color:#ffffff;font-size:19px">🏁 Championship Standings</h2>
-<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="width:100%;border-collapse:collapse"><thead><tr><th align="left" style="padding:11px 8px;color:#ffb34f;border-bottom:2px solid #ff812e;font-size:11px;letter-spacing:1px">TEAM</th><th align="left" style="padding:11px 8px;color:#ffb34f;border-bottom:2px solid #ff812e;font-size:11px;letter-spacing:1px">SCORE</th><th align="left" style="padding:11px 8px;color:#ffb34f;border-bottom:2px solid #ff812e;font-size:11px;letter-spacing:1px">MOVEMENT</th></tr></thead><tbody>${rowsHtml}</tbody></table>
-<h2 style="margin:27px 0 12px;color:#ffffff;font-size:19px">✨ Performance Spotlight</h2>
-<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0"><tr><td style="padding:13px 14px;background:#111d33;border-left:3px solid #ffb34f"><strong style="color:#ffb34f">★ CSAT CHAMPION</strong><div style="margin-top:5px;color:#edf2ff">${escapeRecapHtml(csatLeader.team_name)} · ${Number(csatLeader.csat).toFixed(2)}%</div></td></tr><tr><td height="8" style="font-size:0;line-height:0">&nbsp;</td></tr><tr><td style="padding:13px 14px;background:#17182f;border-left:3px solid #b777ff"><strong style="color:#d5a6ff">◆ QA CHAMPION</strong><div style="margin-top:5px;color:#edf2ff">${escapeRecapHtml(qaLeader.team_name)} · ${Number(qaLeader.qa).toFixed(2)}%</div></td></tr><tr><td height="8" style="font-size:0;line-height:0">&nbsp;</td></tr><tr><td style="padding:13px 14px;background:#111d33;border-left:3px solid #41d9e8"><strong style="color:#41d9e8">⚡ AHT CHAMPION</strong><div style="margin-top:5px;color:#edf2ff">${escapeRecapHtml(ahtLeader.team_name)} · ${recapAht(ahtLeader.aht_seconds)}</div></td></tr></table>
-<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-top:26px"><tr><td align="center" style="padding:18px;background:#ff812e;border-radius:9px"><a href="#" style="display:inline-block;color:#11172a;text-decoration:none;font-weight:900;letter-spacing:1px;font-size:14px">OPEN PERFORMANCE LEAGUE &nbsp; →</a></td></tr></table>
-</td></tr>
-<tr><td align="center" style="padding:18px 16px 22px;background:#090f1e;border-top:1px solid #293452"><div style="font-size:12px;color:#b5c2dc;font-weight:bold;letter-spacing:1px">RACE FAIRLY. CELEBRATE PROGRESS. KEEP IMPROVING.</div><div style="font-size:18px;margin-top:9px">🏁 🎃 🏁</div></td></tr>
-</table></td></tr></table></body></html>`;
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width"><title>FA Performance League — Friday Race Recap</title></head>
+<body style="margin:0;padding:0;background:#070d1b;color:#edf2ff;font-family:Arial,Helvetica,sans-serif"><table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background:#070d1b"><tr><td align="center" style="padding:22px 10px"><table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="max-width:720px;background:#0d172b;border:1px solid #293452;border-radius:14px;overflow:hidden">
+<tr><td style="padding:0;background:#10172b;border-bottom:4px solid #ff762e"><img src="https://sundayprojectsss.github.io/faperformanceleague/fa-performance-league-halloween-race-recap-banner.jpg" width="720" alt="FA Performance League — Friday Race Recap" style="display:block;width:100%;max-width:720px;height:auto;border:0"/><div style="padding:10px 16px;text-align:center;background:#10172b;color:#c3cee5;font-size:12px;letter-spacing:1px">🎃 &nbsp; ${escapeRecapHtml(recapDateLabel(reportDate)).toUpperCase()} &nbsp; · &nbsp; WEEKLY CSAT RACE &nbsp; 🦇</div></td></tr>
+<tr><td style="padding:22px 20px 24px"><table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background:#111d33;border:1px solid #35415e;border-radius:12px"><tr><td style="padding:18px;border-left:4px solid #ff812e"><div style="font-size:11px;letter-spacing:2px;color:#ffb34f;font-weight:bold">🏆 CSAT CHAMPION · TEAM OF THE WEEK</div><div style="font-size:27px;line-height:1.2;font-weight:bold;color:#ffffff;margin:8px 0">${escapeRecapHtml(teamOfWeek.team_name)}</div><div style="font-size:16px;color:#f5f7ff;font-weight:bold">${Number(teamOfWeek.csat).toFixed(2)}% CSAT <span style="font-size:12px;font-weight:normal;color:#aebbd5">· RANK #1</span></div><div style="font-size:12px;color:#c4d2e3;margin-top:8px">${escapeRecapHtml(targetStatus)}</div></td></tr></table>
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0"><tr><td height="18">&nbsp;</td></tr><tr><td style="padding:15px;background:#17182f;border:1px solid #3c3159;border-left:4px solid #b777ff;border-radius:9px"><div style="font-size:11px;letter-spacing:1.5px;color:#d5a6ff;font-weight:bold">⬆ BIGGEST CLIMBER</div><div style="margin-top:7px;color:#edf2ff;font-size:14px;line-height:1.5">${movementBlock}</div></td></tr><tr><td height="10">&nbsp;</td></tr><tr><td style="padding:15px;background:#111d33;border:1px solid #293d59;border-left:4px solid #41d9e8;border-radius:9px"><div style="font-size:11px;letter-spacing:1.5px;color:#41d9e8;font-weight:bold">⚡ CLOSEST CSAT BATTLE</div><div style="margin-top:7px;color:#edf2ff;font-size:14px;line-height:1.5">${closestBlock}</div></td></tr></table>
+<h2 style="margin:26px 0 12px;color:#ffffff;font-size:19px">🏁 Championship Standings</h2><table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="width:100%;border-collapse:collapse"><thead><tr><th align="left" style="padding:11px 8px;color:#ffb34f;border-bottom:2px solid #ff812e;font-size:11px;letter-spacing:1px">TEAM</th><th align="left" style="padding:11px 8px;color:#ffb34f;border-bottom:2px solid #ff812e;font-size:11px;letter-spacing:1px">CSAT</th><th align="left" style="padding:11px 8px;color:#ffb34f;border-bottom:2px solid #ff812e;font-size:11px;letter-spacing:1px">MOVEMENT</th></tr></thead><tbody>${rowsHtml}</tbody></table>
+<h2 style="margin:27px 0 12px;color:#ffffff;font-size:19px">✨ Race Rule</h2><div style="padding:14px;background:#111d33;border-left:3px solid #ffb34f;color:#edf2ff;line-height:1.6">The team with the highest CSAT wins. The Guatemala CSAT target remains <strong>64%</strong> and is tracked separately from rank.</div><div style="margin-top:26px;text-align:center;padding:18px;background:#ff812e;border-radius:9px"><a href="#" style="display:inline-block;color:#11172a;text-decoration:none;font-weight:900;letter-spacing:1px;font-size:14px">OPEN PERFORMANCE LEAGUE &nbsp; →</a></div></td></tr>
+<tr><td align="center" style="padding:18px 16px 22px;background:#090f1e;border-top:1px solid #293452"><div style="font-size:12px;color:#b5c2dc;font-weight:bold;letter-spacing:1px">RACE FAIRLY. CELEBRATE PROGRESS. KEEP IMPROVING.</div><div style="font-size:18px;margin-top:9px">🏁 🎃 🏁</div></td></tr></table></td></tr></table></body></html>`;
     return {html:fullHtml,teamOfWeek,climber,closest};
   }
   async function generateWeeklyRecap(){
@@ -1598,24 +1566,24 @@
     try{
       if(!reportDate) throw new Error('Choose the report date first.');
       const {data:rows,error}=await supabaseClient.from('weekly_race_snapshots')
-        .select('snapshot_date,team_id,team_name,team_color,csat,qa,aht_seconds,overall_score,rank')
-        .eq('snapshot_date',reportDate).order('rank',{ascending:true});
+        .select('snapshot_date,team_id,team_name,team_color,csat')
+        .eq('snapshot_date',reportDate).order('csat',{ascending:false});
       if(error) throw new Error(error.message);
       if(!rows || rows.length===0) throw new Error(`No saved weekly snapshot was found for ${reportDate}. Capture the full snapshot in Supabase first.`);
-      if(rows.length!==7 || new Set(rows.map(r=>r.team_id)).size!==7 || new Set(rows.map(r=>Number(r.rank))).size!==7){
-        throw new Error(`The snapshot has ${rows.length} rows and is incomplete. Expected all 7 teams with unique ranks.`);
+      if(rows.length!==7 || new Set(rows.map(r=>r.team_id)).size!==7){
+        throw new Error(`The snapshot has ${rows.length} rows and is incomplete. Expected one row for each of the 7 teams.`);
       }
       const {data:dates,error:dateError}=await supabaseClient.from('weekly_race_snapshots')
         .select('snapshot_date').lt('snapshot_date',reportDate).order('snapshot_date',{ascending:false}).limit(1);
       let previousRows=[];
       if(!dateError && dates?.length){
         const prevResult=await supabaseClient.from('weekly_race_snapshots')
-          .select('team_id,team_name,overall_score,rank').eq('snapshot_date',dates[0].snapshot_date);
+          .select('team_id,team_name,csat').eq('snapshot_date',dates[0].snapshot_date);
         if(!prevResult.error && prevResult.data?.length===7) previousRows=prevResult.data;
       }
       const report=buildRecapEmail(reportDate,rows,previousRows);
       latestRecapHtml=report.html;
-      document.getElementById('recapPreviewBody').innerHTML=`<div style="color:#9fb1c6;font-size:11px;letter-spacing:1px">REPORT DATE · ${escapeRecapHtml(recapDateLabel(reportDate))}</div><div class="recap-hero">🏆 ${escapeRecapHtml(report.teamOfWeek.team_name)}</div><div style="color:#9fb1c6">Team of the Week · ${Number(report.teamOfWeek.overall_score).toFixed(2)}% visible score</div><p><strong style="color:#ffd45a">Biggest climber:</strong> ${report.climber?`${escapeRecapHtml(report.climber.team_name)} (+${report.climber.movement})`:'No previous snapshot available — movement not calculated.'}</p><p><strong style="color:#42e8ff">Closest race:</strong> ${report.closest?`${escapeRecapHtml(report.closest.a.team_name)} vs ${escapeRecapHtml(report.closest.b.team_name)} · ${report.closest.gap.toFixed(2)} point gap`:'Not available.'}</p>${report.html.match(/<table[\s\S]*?<\/table>/)?.[0]||''}<p style="color:#8fa4bd">Metric spotlight: CSAT — ${escapeRecapHtml(rows.sort((a,b)=>Number(b.csat)-Number(a.csat))[0].team_name)} · QA — ${escapeRecapHtml([...rows].sort((a,b)=>Number(b.qa)-Number(a.qa))[0].team_name)} · AHT — ${escapeRecapHtml([...rows].sort((a,b)=>Number(a.aht_seconds)-Number(b.aht_seconds))[0].team_name)}</p>`;
+      document.getElementById('recapPreviewBody').innerHTML=`<div style="color:#9fb1c6;font-size:11px;letter-spacing:1px">REPORT DATE · ${escapeRecapHtml(recapDateLabel(reportDate))}</div><div class="recap-hero">🏆 ${escapeRecapHtml(report.teamOfWeek.team_name)}</div><div style="color:#9fb1c6">Team of the Week · ${Number(report.teamOfWeek.csat).toFixed(2)}% CSAT</div><p><strong style="color:#ffd45a">Biggest climber:</strong> ${report.climber?`${escapeRecapHtml(report.climber.team_name)} (+${report.climber.movement})`:'No previous snapshot available — movement not calculated.'}</p><p><strong style="color:#42e8ff">Closest CSAT battle:</strong> ${report.closest?`${escapeRecapHtml(report.closest.a.team_name)} vs ${escapeRecapHtml(report.closest.b.team_name)} · ${report.closest.gap.toFixed(2)} CSAT point gap`:'Not available.'}</p>${report.html.match(/<table[\s\S]*?<\/table>/)?.[0]||''}<p style="color:#8fa4bd">Competition metric: CSAT only · Target: 64%</p>`;
       document.getElementById('recapPreview').hidden=false;
       document.getElementById('downloadRecapBtn').disabled=false;
       status.textContent=previousRows.length?'Preview generated using this week and the previous complete snapshot. Review it before sending.':'Preview generated. This is the baseline week, so movement is intentionally not reported.';
@@ -1669,10 +1637,11 @@
   }
 
   function render(data){
+    data = applyDevelopmentOverrides(data);
     config = {
-      weights: normalizeWeights(data.settings?.weights),
+      weights: {csat:1,qa:0,aht:0},
       targets: {
-        csat: Number(data.settings?.targets?.csat ?? 64),
+        csat: 64,
         qa: Number(data.settings?.targets?.qa ?? 90),
         ahtSeconds: Number(data.settings?.targets?.ahtSeconds ?? 735)
       },
@@ -1686,9 +1655,13 @@
     teams = (data.teams || [])
       .map(calculateTeam)
       .sort((a,b) => {
-        if(Math.abs(b.score-a.score)>0.0001) return b.score-a.score;
-        return b.rawPerformance-a.rawPerformance;
-      });
+        const diff = Number(b.metrics.csat) - Number(a.metrics.csat);
+        return Math.abs(diff) > 0.0001 ? diff : a.id - b.id;
+      })
+      .map((team,index,sorted) => ({
+        ...team,
+        rank: index===0 ? 1 : (Math.abs(Number(team.metrics.csat)-Number(sorted[index-1].metrics.csat)) < 0.0001 ? sorted[index-1].rank : index+1)
+      }));
 
     const lanes = document.getElementById('lanes');
     const standings = document.getElementById('standingList');
@@ -1702,12 +1675,12 @@
     replayableEvents=safeGetJSON(replayKey(season),replayableEvents);
     document.getElementById('seasonLabel').textContent = season;
     document.getElementById('updatedLabel').textContent = formatUpdatedAt(data.lastUpdated);
-    document.getElementById('weightLabel').textContent = `${Math.round(config.weights.csat*100)} / ${Math.round(config.weights.qa*100)} / ${Math.round(config.weights.aht*100)}`;
+    document.getElementById('weightLabel').textContent = 'CSAT ONLY';
     document.getElementById('leaderLabel').textContent = leader?.name?.replace('Team ','') || '—';
-    document.getElementById('leaderBadge').textContent = leader ? `${leader.name} leads at ${oneDecimal(leader.score)}%` : 'No teams';
+    document.getElementById('leaderBadge').textContent = leader ? `${leader.name} leads at ${oneDecimal(leader.metrics.csat)}% CSAT` : 'No teams';
 
     teams.forEach((team,index)=>{
-      const rank=index+1;
+      const rank=team.rank || index+1;
       const row=document.createElement('div');
       row.className='lane' + (selectedId===team.id?' active':'');
       row.dataset.id=team.id;
@@ -1716,7 +1689,7 @@
         <div class="lane-meta">
           <div class="rank ${rank===1?'r1':rank===2?'r2':rank===3?'r3':''}">${rank}</div>
           <span class="team-dot" style="background:${team.color}"></span>
-          <div><div class="team-name">${team.name}</div><div class="status">${statusFor(team)} · ${team.targetsHit}/3 targets${team.allTargetsMet?' · 🏆':''}</div></div>
+          <div><div class="team-name">${team.name}</div><div class="status">${statusFor(team)}${team.allTargetsMet?' · 🏆':''}</div></div>
         </div>
         <div class="track">
           <div class="checkpoint c25"><b>25</b></div><div class="checkpoint c50"><b>50</b></div><div class="checkpoint c75"><b>75</b></div><div class="checkpoint c100"><b>100</b></div>
@@ -1735,7 +1708,7 @@
         <div class="stand-car" style="--team:${team.color}" aria-hidden="true">${carSVG(team.color,team.name)}</div>
         <div class="stand-team">
           <strong>${team.name}</strong>
-          <div class="stand-sub">${statusFor(team)} · ${team.targetsHit}/3 targets${team.targetMargin>0?` · +${oneDecimal(team.targetMargin)} margin`:''}</div>
+          <div class="stand-sub">${statusFor(team)}${team.targetMargin>0?` · +${oneDecimal(team.targetMargin)} pts over target`:''}</div>
           <div class="mini-progress"><i style="width:${team.score}%;background:${team.color}"></i></div>
         </div>
         <div class="stand-score">${oneDecimal(team.score)}%</div>
@@ -1811,35 +1784,21 @@
   function renderAverageMetrics(team){
     const container=document.getElementById('averageMetrics');
     if(!container) return;
-    const metrics=[
-      {key:'csat',label:'CSAT',value:`${oneDecimal(team.metrics.csat)}%`,target:`Target: ${Math.round(config.targets.csat)}%`},
-      {key:'qa',label:'QA',value:`${oneDecimal(team.metrics.qa)}%`,target:`Target: ${Math.round(config.targets.qa)}%`},
-      {key:'aht',label:'AHT',value:formatAHT(team.metrics.ahtSeconds),target:`Target: ${formatAHT(config.targets.ahtSeconds)}`}
-    ];
-    container.innerHTML=metrics.map(metric=>{
-      const status=averageMetricStatus(team,metric.key);
-      const statusLabel=status==='good'?'ON TARGET':status==='near'?'NEAR TARGET':'BELOW TARGET';
-      return `<div class="average-metric ${status}">
-        <div class="average-metric-top">
-          <span class="average-metric-label">${metric.label} average</span>
-          <span class="average-metric-status">${statusLabel}</span>
-        </div>
-        <div class="average-metric-value">${metric.value}</div>
-        <div class="average-metric-target">${metric.target}</div>
-      </div>`;
-    }).join('');
+    const status=averageMetricStatus(team,'csat');
+    const statusLabel=status==='good'?'ON TARGET':status==='near'?'NEAR TARGET':'BELOW TARGET';
+    container.innerHTML=`<div class="average-metric ${status}"><div class="average-metric-top"><span class="average-metric-label">CSAT</span><span class="average-metric-status">${statusLabel}</span></div><div class="average-metric-value">${oneDecimal(team.metrics.csat)}%</div><div class="average-metric-target">Target: ${Math.round(config.targets.csat)}%</div></div>`;
   }
 
   function updateSelectedDetails(){
     const team=teams.find(t=>t.id===selectedId);
     if(!team) return;
-    const rank=teams.findIndex(t=>t.id===selectedId)+1;
+    const rank=team.rank || teams.findIndex(t=>t.id===selectedId)+1;
     const rankText=`${rank}${rankSuffix(rank)}`;
 
     document.getElementById('detailName').textContent=team.name;
-    document.getElementById('detailMeta').textContent=`${statusFor(team)} · ${rankText} in the league · ${team.targetsHit}/3 targets`;
-    document.getElementById('detailStatus').innerHTML=team.allTargetsMet ? '<span class="target-chip good">🏆 Target Master</span>' : `<span class="target-chip ${team.targetsHit>=2?'good':'warn'}">${team.targetsHit}/3 targets</span>`;
-    document.getElementById('selectedRank').textContent=`${rankText} place · weighted score`;
+    document.getElementById('detailMeta').textContent=`${statusFor(team)} · ${rankText} in the CSAT league`;
+    document.getElementById('detailStatus').innerHTML=team.allTargetsMet ? '<span class="target-chip good">🏆 CSAT target met</span>' : '<span class="target-chip warn">Below 64% CSAT</span>';
+    document.getElementById('selectedRank').textContent=`${rankText} place · CSAT`;
     document.getElementById('detailScore').textContent=oneDecimal(team.score);
     document.getElementById('detailDot').style.background=team.color;
     document.getElementById('detailDot').style.boxShadow=`0 0 0 6px ${team.color}18`;
@@ -1852,28 +1811,19 @@
 
     renderAverageMetrics(team);
 
-    document.getElementById('targetNote').textContent=`Targets: CSAT ${Math.round(config.targets.csat)}% · QA ${Math.round(config.targets.qa)}% · AHT ${formatAHT(config.targets.ahtSeconds)}. Meeting the target earns 100 points for that metric; overall performance is capped at 100%.`;
+    document.getElementById('targetNote').textContent=`Ranking is based on raw CSAT. Guatemala target: ${Math.round(config.targets.csat)}%. Highest CSAT wins, whether or not the target is met.`;
 
     const marginNote=document.getElementById('detailName').parentElement.querySelector('.detail-badges');
     if(marginNote) marginNote.remove();
     if(team.allTargetsMet){
       const badges=document.createElement('div'); badges.className='detail-badges';
-      badges.innerHTML=`<span class="target-chip good">🏆 3 / 3 targets</span><span class="target-chip good">🔥 +${oneDecimal(team.targetMargin)} target margin</span>`;
+      badges.innerHTML=`<span class="target-chip good">🏆 CSAT target met</span><span class="target-chip good">🔥 +${oneDecimal(team.targetMargin)} pts over target</span>`;
       document.getElementById('detailName').parentElement.appendChild(badges);
     }
 
     const metricList=document.getElementById('metricList');
-    metricList.innerHTML = metricConfigRows(team).map(metric=>`
-      <div class="metric-row ${metric.key}" style="border-color:${metric.met ? 'rgba(89,216,140,.20)' : 'rgba(255,113,131,.12)'}">
-        <div class="metric-top">
-          <div class="metric-name">${metric.label} · weight ${Math.round(metric.weight*100)}%</div>
-          <div class="metric-values">${metric.value}</div>
-        </div>
-        <div class="metric-contrib">${metricTargetText(team,metric.key)} · ${metricStatus(team,metric.key)} · ${metricGapText(team,metric.key)}</div>
-        <div class="metric-contrib">Performance score: <strong>${oneDecimal(metric.score)}</strong> · contributes <strong>${oneDecimal(metric.contribution)} pts</strong></div>
-        <div class="metric-bar"><i style="width:${metric.score}%;background:${metric.met?'#59d88c':metric.key==='csat'?'#ff7183':metric.key==='qa'?'#ffb454':'#42e8ff'}"></i></div>
-      </div>
-    `).join('');
+    const csatMet=metricTargetMet(team,'csat');
+    metricList.innerHTML=`<div class="metric-row csat" style="border-color:${csatMet?'rgba(89,216,140,.20)':'rgba(255,113,131,.12)'}"><div class="metric-top"><div class="metric-name">CSAT · sole competition metric</div><div class="metric-values">${oneDecimal(team.metrics.csat)}%</div></div><div class="metric-contrib">Target ${Math.round(config.targets.csat)}% · ${csatMet?'ON TARGET':'BELOW TARGET'}</div><div class="metric-bar"><i style="width:${clamp(team.metrics.csat,0,100)}%;background:${csatMet?'#59d88c':'#ff7183'}"></i></div></div>`;
   }
 
   document.getElementById('eventClose').addEventListener('click',()=>{
